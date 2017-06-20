@@ -3,10 +3,11 @@
   <groupId>com.sendbird.sdk</groupId>
   <artifactId>sendbird-desk-android-sdk</artifactId>
   <versioning>
-    <release>0.9.0</release>
+    <release>0.9.1</release>
     <versions>
       <version>0.9.0</version>
+      <version>0.9.1</version>
     </versions>
-    <lastUpdated>20170506214227</lastUpdated>
+    <lastUpdated>20170620070305</lastUpdated>
   </versioning>
 </metadata>
