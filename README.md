@@ -31,7 +31,7 @@ And then add the following lines to your project-level `build.gradle` file.
 ```gradle
 dependencies {
     compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.33'
-    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:0.9.9'
+    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:0.9.10'
 }
 ```
 
