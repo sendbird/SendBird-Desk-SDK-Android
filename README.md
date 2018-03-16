@@ -1,25 +1,29 @@
 SendBird Desk SDK Integration Guide for Android
 ===========
-SendBird Desk is the Zendesk-integrated chat customer service platform built on SendBird SDK and API.
+SendBird Desk is a chat customer service platform built on SendBird SDK and API.
 
-Desk Android SDK provides customer-side integration on your own application, so you can easily implement customers' **chat inquiry, inquiries inbox with UI theming**.  
-Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBird Android SDK 3.0.33 or higher**.
+Desk Android SDK provides customer-side integration on your own application, so you can easily implement **ticketing system with chat inquiry**.  
+Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBird Android SDK 3.0.54 or higher**.
 
 ## Table of Contents
 
   1. [Installation](#installation)
   1. [Initialization](#initialization)
+  1. [Authentication](#authentication)
   1. [Creating a new ticket](#creating-a-new-ticket)
-  1. [Loading inbox](#loading-inbox)
-  1. [Receiving events](#receiving-events)
+  1. [Count of opened tickets](#count-of-opened-tickets)
+  1. [Loading ticket list](#loading-ticket-list)
+  1. [Confirming end of chat](#confirming-end-of-chat)
+  1. [Handling ticket event](#handling-ticket-event)
+  1. [Rich messages](#rich-messages)
   
 ## Installation
 
 First of all, you need SendBird App ID to start (It can be created on [SendBird Dashboard](https://dashboard.sendbird.com), but for Desk usage, you may need upgrade.),
-so please contact [desk@sendbird.com](mailto:desk@sendbird.com) if you want one.
+so please contact [desk@sendbird.com](mailto:desk@sendbird.com) if you want to try Desk.
 
 Installing the Desk SDK is a straightforward process if you're familiar with using external libraries or SDKs in your projects.
-To install the Desk SDK using Gradle, add the following lines to your app-level `build.gradle` file.
+To install the Desk SDK using Gradle, add the following lines to your project-level `build.gradle` file.
 ```gradle
 repositories {
     maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
@@ -27,79 +31,64 @@ repositories {
 }
 ```
 
-And then add the following lines to your project-level `build.gradle` file.
+And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
-    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.33'
-    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:0.9.10'
+    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.54'
+    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.0-zendesk'
 }
 ```
 
 ## Initialization
 
-Invoke `SendBirdDesk.init()` with your SendBird App ID before you use other features on SendBird Desk SDK.
+Invoke `SendBird.init()` with your SendBird App ID just like when you initialize SendBird SDK and then
+call `SendBirdDesk.init()` to use SendBird Desk SDK's features. Please be sure to initialize SendBird SDK before SendBirdDesk SDK.
 ```java
 public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SendBirdDesk.init(APP_ID, this);
+        SendBird.init(APP_ID, this);
+        SendBirdDesk.init();
     }
 }
 ```
 
-> Calling `SendBirdDesk.init()` on `Application.onCreate()` is highly recommended.
+> Calling `SendBird.init()` and `SendBirdDesk.init()` on `Application.onCreate()` is highly recommended.
 
-> You can use SendBird SDK with SendBird Desk SDK (for example, when you want to build your own messenger and also use Desk service together on your application.)
-> In that case, you must use **the same APP_ID** for both SDK (`SendBird.init()` is not necessary, `SendBirdDesk.init()` is sufficient because it calls `SendBird.init()` inside).
-And please note that SendBird SDK version must be 3.0.33 or higher to work with Desk SDK.
+> Even you use SendBird Desk SDK, you have to handle chat messages thru SendBird SDK. SendBird Desk SDK provides add-on features like chat ticket creation and loading chat tickets.
+Ticket is the concept that does not exist on SendBird SDK and newly introduced on SendBird Desk SDK to support customer service ticketing system.
+Every ticket created will be assigned to the appropriate agents and it will have a mapping channel of SendBird SDK, so you can implement real-time messaging on tickets with SendBird SDK.
+> While using SendBird Desk SDK, it is also possible that you implement your own chat service using SendBird SDK.
+For example, if you are operating an on-demand service, you can add an in-app messenger (for your platform users) as well as customer service chat (between users and agents)
+into your application or website by combination of SendBird SDK and SendBird Desk SDK.
 
-You should prepare FCM settings too. On your FirebaseMessagingService, add the following lines.
+
+## Authentication
+
+After initialization, connecting to SendBird's server by SendBird SDK is required for real-time messaging. 
+This part is fully described on [SendBird SDK guide docs](https://docs.sendbird.com/android#authentication_2_authentication).
+Authentication of SendBird Desk `SendBirdDesk.authenticate()` is also a mandatory for you to use ticket related features.
+Below is an example for SendBird SDK connection and SendBird Desk SDK authentication.
 ```java
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (SendBirdDesk.isSendBirdPushNotification(remoteMessage)) {
-            SendBirdDesk.handlePushNotificationMessage(this, remoteMessage);
-        }
-    }
-}
-```
-By just calling `SendBirdDesk.handlePushNotificationMessage()`, Desk SDK will build and pop-up notification from Desk messages for you.
-
-After init, connect a user to SendBird's server using **User ID**.
-This part is fully described on [SendBird SDK guide docs](https://docs.sendbird.com/android#authentication_3_connecting_with_userid),
-and you can think of this process as a pre-step for Desk SDK, for it is built on SendBird SDK.
-Below is the code snippet which can be found on Desk sample to show you what can be done after connection.
-```java
-SendBird.connect(USER_ID, new SendBird.ConnectHandler() {
+SendBird.connect(userId, accessToken, new SendBird.ConnectHandler() {
     @Override
     public void onConnected(User user, SendBirdException e) {
         if (e != null) {
+            // Error handling.
             return;
         }
-  
-        SendBird.updateCurrentUserInfo(USER_NAME, null, new SendBird.UserInfoUpdateHandler() {
+
+        // Use the same user Id and access token used on SendBird.connect.
+        SendBirdDesk.authenticate(userId, accessToken, new SendBirdDesk.AuthenticateHandler() {
             @Override
-            public void onUpdated(SendBirdException e) {
+            public void onResult(SendBirdException e) {
                 if (e != null) {
+                    // Error handling.
                     return;
                 }
-  
-                SendBirdDesk.setUserInfo(USER_ID, null);  // Saves user information on Desk.
                 
-                SendBirdDesk.getOpenTicketCount(new SendBirdDesk.GetOpenTicketCountHandler() {
-                    @Override
-                    public void onResult(int count, SendBirdException e) {
-                        if (e != null) {
-                            return;
-                        }
-                        // Open tickets count can be read.
-                    }
-                });
-                
-                if (FirebaseInstanceId.getInstance().getToken() == null) return;
-                SendBirdDesk.updatePushToken(FirebaseInstanceId.getInstance().getToken());  // Updates push token.
+                // Now you can create a ticket, get open ticket count and load tickets.
             }
         });
     }
@@ -110,96 +99,132 @@ Now your customers are ready to create chat tickets and start inquiry with your 
 
 ## Creating a new ticket
 
-Creating a new ticket is as simple as just calling `SendBirdDesk.startChat()`. Ticket title and custom information can be passed at the same time.
-Currently, at this Zendesk integration version, you can set custom information as Zendesk ticket object you want to create at agent side.
+Creating a new ticket is as simple as just calling `Ticket.create()`. Ticket title and user name can be passed at the same time.
+The returned ticket will have a channel instance which can be accessed by `ticket.getChannel()`. So you can send messages to the channel using SendBird SDK.
+For more detail of sending messages to channel, please refer to [SendBird SDK guide docs](https://docs.sendbird.com/android#group_channel_3_sending_messages).
+Please notice that only after customers sending at least one message to the ticket, the ticket will be routed to the online agents so they can answer it.
 ```java
-JsonObject ticket = new JsonObject();
-  
-// Requester.
-JsonObject requester = new JsonObject();
-requester.addProperty("name", USER_NAME);
-requester.addProperty("email", USER_ID);
-ticket.add("requester", requester);
-  
-// Subject.
-ticket.addProperty("subject", YOUR_TICKET_TITLE);
-  
-// Comment.
-JsonObject comment = new JsonObject();
-comment.addProperty("body", COMMENT_TO_DISPLAY_ON_ZENDESK_TICKET);
-ticket.add("comment", comment);
-  
-// Tags.
-JsonArray tags = new JsonArray();
-tags.add("sendbird");
-ticket.add("tags", tags);
-  
-JsonObject zendesk = new JsonObject();
-zendesk.add("ticket", ticket);
-  
-SendBirdDesk.startChat(
-        zendesk.get("ticket").getAsJsonObject().get("subject").getAsString(),
-        zendesk.toString()
-);
-```
-
-## Loading inbox
-Inbox displays all the open tickets and closed ticket history for the customer.
-Customers can move to inbox from chat screen by touching menu on top bar, but you can also directly let customers go to inbox in your application by calling
-```java
-SendBirdDesk.showInbox();
-```
-
-## Receiving events
-You may want to gather your customers action to your own funnel analysis tools.
-All customers action like text sending, file sending or menu touching will be called back on `SendBirdDesk.EventListener` so you can utilize it.
-```java
-public class MyApplication extends Application {
+Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
     @Override
-    public void onCreate() {
-        super.onCreate();
-       
-        SendBirdDesk.init(APP_ID, this);
-        SendBirdDesk.setEventListener(new SendBirdDesk.EventListener() {
-            @Override
-            public void onEvent(String action, Map<String, String> data) {
-                // Send to your own funnel analysis tools.
-            }
-        });
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+           return;
+        }
+        // Now you can send messages to the ticket by ticket.getChannel().sendUserMessage() or sendFileMessage().
+    }
+});
+```
+
+## Count of opened tickets
+When you need to display opened ticket count somewhere on your application, `Ticket.getOpenCount()` is useful.
+```java
+Ticket.getOpenCount(new Ticket.GetOpenCountHandler() {
+    @Override
+    public void onResult(int count, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+
+    }
+});
+```
+
+## Loading ticket list
+Usually you will design `Inbox` activity for open tickets and closed tickets history for your customer.
+Open tickets and closed tickets can be loaded from `Ticket.getOpenedList()` and `Ticket.getClosedList()`.
+Zero is a good start value of the offset, then the maximum 10 tickets will be returned for each call by last message creation time descending order.
+Open ticket list and closed ticket list can be loaded like below:
+```java
+Ticket.getOpenedList(offset, new Ticket.GetOpenedListHandler() {
+    @Override
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+
+        // offset += tickets.size(); for the next tickets.
+        // This is the best place you display tickets on inbox. 
+    }
+});
+```
+
+```java
+Ticket.getClosedList(mOffset, new Ticket.GetClosedListHandler() {
+    @Override
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        
+        // offset += tickets.size(); for the next tickets.
+        // This is the best place you display tickets on inbox. 
+    }
+});
+```
+
+## Confirming end of chat
+There are predefined rich messages on SendBird Desk and `Confirm end of chat` is one of them. For other rich messages, please refer to [Handling messages](#handling-messages).
+All rich messages have message custom type (can be accessed by `UserMessage.getCustomType()` on SendBird SDK) as `SENDBIRD_DESK_RICH_MESSAGE`,
+and `Confirm end of chat` message has custom data (can be accessed by `UserMessage.getData()` on SendBird SDK) as below:
+```json
+{
+    "type": "SENDBIRD_DESK_INQUIRE_TICKET_CLOSURE",
+    "body": {
+        "state": "WAITING" // also can have "CONFIRMED", "DECLINED"
     }
 }
 ```
+This `Confirm end of chat` massage is initiated from agents to inquire closure of ticket to customers.
+The initial `state` will be `WAITING` and you have to implement of updating the `state` according to customers action.
+Usually, you can display `YES` or `NO` button like sample and update to `CONFIRMED` when customers touch `YES` button. Updating to `DECLINED` is also possible when customers touch `NO`.
+For update the `state` of `Confirm end of chat`, please use `ticket.confirmEndOfChat()`.
+```java
+ticket.confirmEndOfChat(userMessage, confirm_or_decline, new Ticket.ConfirmEndOfChatHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        
+        // You can update message UI like hiding YES NO buttons.
+    }
+});
+```
+At the moment, tickets will be closed (ticket close event will be sent to customers) only after customers confirming end of chat,  
 
-The actions and data you can track at the moment are belows.
+## Handling ticket event
+SendBird Desk SDK uses some predefined AdminMessage custom type (`AdminMessage.getCustomType()` on SendBird SDK) for ticket update notification.
+This reserved custom type value is `SENDBIRD_DESK_ADMIN_MESSAGE_CUSTOM_TYPE` and at the moment there are 3 kinds of ticket event, which are `Ticket assign`, `Ticket transfer` and `Ticket close`.
+Each event has the following `AdminMessage.getData()`:
+```json
+{
+    "type": "TICKET_ASSIGN" // "TICKET_TRANSFER", "TICKET_CLOSE"
+}
+```
+You can check these messages from `ChannelHandler.onMessageReceived()` callback on SendBird SDK.
+SendBird Desk SDK internally tracks these events and update ticket status automatically. So when you see these events, you can directly get ticket object by `Ticket.getByChannelUrl()` and then use it for e.g. 
+rendering assigned agent's profile or moving ticket from open list to closed list.
 
-|Action|Data|Description|
-| -- | -- | -- |
-|CHAT_ENTER|title, status, ticket_id|User enters chat screen|
-|CHAT_SEND_USER_MESSAGE|message|User sends text message|
-|CHAT_ATTACH_FILE|file_name, file_size, mime_type|User attaches file message|
-|CHAT_DOWNLOAD_AGENT_FILE|file_name, url|User downloads file message from agents|
-|CHAT_CONFIRM_END_OF_CHAT|choice|User confirms end of chat from agents inquiry|
-|CHAT_CLOSE_ALL|-|User closes screen by touching X button on toolbar of chat|
-|CHAT_EXIT|-|User exits chat screen|
-|WEB_VIEWER_ENTER|url|User enters web viewer|
-|WEB_VIEWER_RELOAD|-|User touches reload button of web viewer|
-|WEB_VIEWER_EXIT|-|User exits web viewer|
-|PHOTO_VIEWER_ENTER|file_name, file_size, mime_type|User enters photo viewer|
-|PHOTO_VIEWER_DOWNLOAD_FILE|file_name, url|User downloads file from photo viewer|
-|PHOTO_VIEWER_EXIT|-|User exits photo viewer|
-|VIDEO_PLAYER_ENTER|file_name, file_size, mime_type|User enters video player|
-|VIDEO_PLAYER_DOWNLOAD_FILE|file_name, url|User downloads file from video player|
-|VIDEO_PLAYER_EXIT|-|User exits video player|
-|INBOX_ENTER|-|User enters inbox|
-|INBOX_OPEN_TAB_SELECTED|-|User selects open tickets tab|
-|INBOX_CLOSE_TAB_SELECTED|-|User selects closed tickets tab|
-|INBOX_OPEN_TICKET_SELECTED|title, status, ticket_id|User selects an open ticket|
-|INBOX_CLOSE_TICKET_SELECTED|title, status, ticket_id|User selects a closed ticket|
-|INBOX_MOVE_TO_SETTINGS|-|User touches settings button on toolbar of inbox|
-|INBOX_CLOSE_ALL|-|User closes screen by touching X button on toolbar of inbox|
-|INBOX_EXIT|-|User exits inbox|
-|SETTINGS_ENTER|-|User enters settings|
-|SETTINGS_PUSH_ON|-|User sets on push notification|
-|SETTINGS_PUSH_OFF|-|User sets off push notification|
-|SETTINGS_CLOSE_ALL|-|User closes screen by touching X button on toolbar of settings|
-|SETTINGS_EXIT|-|User exits settings|
+## Rich messages
+Besides, `Confirm end of chat` message, URL preview is available as one of rich messages. (We are adding more very fast.)
+URL preview message's `UserMessage.getCustomType()` is also the same as `Confirm end of chat`, so it is `SENDBIRD_DESK_RICH_MESSAGE`.
+Its `UserMessage.getData()` has the following format:
+```json
+{
+    "type": "SENDBIRD_DESK_URL_PREVIEW",
+    "body": {
+        "url": string,
+        "site_name": string,
+        "title": string,
+        "description": string,
+        "image": string (image url)
+    }
+}
+```
+Therefore, when this type of message is received on `ChannelHandler.onMessageReceived()` or `channel.getPreviousMessagesByTimestamp()`, you can parse the data and use it for URL preview rendering.
+Also if you extract URL information from customers text, build above JSON, stringify it and then send it as custom data by `channel.sendUserMessage()`, agents can also see URL preview.
