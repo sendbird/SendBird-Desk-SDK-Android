@@ -170,7 +170,7 @@ Ticket.getClosedList(mOffset, new Ticket.GetClosedListHandler() {
 There are predefined rich messages on SendBird Desk and `Confirm end of chat` is one of them. For other rich messages, please refer to [Handling messages](#handling-messages).
 All rich messages have message custom type (can be accessed by `UserMessage.getCustomType()` on SendBird SDK) as `SENDBIRD_DESK_RICH_MESSAGE`,
 and `Confirm end of chat` message has custom data (can be accessed by `UserMessage.getData()` on SendBird SDK) as below:
-```json
+```js
 {
     "type": "SENDBIRD_DESK_INQUIRE_TICKET_CLOSURE",
     "body": {
@@ -201,7 +201,7 @@ At the moment, tickets will be closed (ticket close event will be sent to custom
 SendBird Desk SDK uses some predefined AdminMessage custom type (`AdminMessage.getCustomType()` on SendBird SDK) for ticket update notification.
 This reserved custom type value is `SENDBIRD_DESK_ADMIN_MESSAGE_CUSTOM_TYPE` and at the moment there are 3 kinds of ticket event, which are `Ticket assign`, `Ticket transfer` and `Ticket close`.
 Each event has the following `AdminMessage.getData()`:
-```json
+```js
 {
     "type": "TICKET_ASSIGN" // "TICKET_TRANSFER", "TICKET_CLOSE"
 }
@@ -214,15 +214,15 @@ rendering assigned agent's profile or moving ticket from open list to closed lis
 Besides, `Confirm end of chat` message, URL preview is available as one of rich messages. (We are adding more very fast.)
 URL preview message's `UserMessage.getCustomType()` is also the same as `Confirm end of chat`, so it is `SENDBIRD_DESK_RICH_MESSAGE`.
 Its `UserMessage.getData()` has the following format:
-```json
+```js
 {
     "type": "SENDBIRD_DESK_URL_PREVIEW",
     "body": {
-        "url": string,
-        "site_name": string,
-        "title": string,
-        "description": string,
-        "image": string (image url)
+        "url": "string",
+        "site_name": "string",
+        "title": "string",
+        "description": "string",
+        "image": "string (image url)"
     }
 }
 ```
