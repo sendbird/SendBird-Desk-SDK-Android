@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.0.1(Mar 29, 2018)
+* Support SendBird Desk standalone version.
+
 ### v1.0.0-zendesk(Mar 16, 2018)
 * Zendesk-integrated version release.
 * UI components are all moved to sample project for full customization.

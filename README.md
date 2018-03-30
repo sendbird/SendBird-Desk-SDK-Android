@@ -3,7 +3,7 @@ SendBird Desk SDK Integration Guide for Android
 SendBird Desk is a chat customer service platform built on SendBird SDK and API.
 
 Desk Android SDK provides customer-side integration on your own application, so you can easily implement **ticketing system with chat inquiry**.  
-Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBird Android SDK 3.0.54 or higher**.
+Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBird Android SDK 3.0.55 or higher**.
 
 ## Table of Contents
 
@@ -34,8 +34,8 @@ repositories {
 And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
-    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.54'
-    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.0-zendesk'
+    compile 'com.sendbird.sdk:sendbird-android-sdk:3.0.55'
+    compile 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.1'
 }
 ```
 
