@@ -115,6 +115,7 @@ Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
     }
 });
 ```
+> `Ticket.create()` has a overloaded method with `groupKey` and `customField` parameters. The values could be evaluated when a ticket is created though it's used only in Dashboard currently. `groupKey` is the key of an agent group so that the ticket is assigned to the agents in that group. `customField` holds customizable data for the individual ticket.
 
 ## Count of opened tickets
 When you need to display opened ticket count somewhere on your application, `Ticket.getOpenCount()` is useful.
@@ -152,7 +153,7 @@ Ticket.getOpenedList(offset, new Ticket.GetOpenedListHandler() {
 ```
 
 ```java
-Ticket.getClosedList(mOffset, new Ticket.GetClosedListHandler() {
+Ticket.getClosedList(offset, new Ticket.GetClosedListHandler() {
     @Override
     public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
         if (e != null) {
@@ -165,6 +166,7 @@ Ticket.getClosedList(mOffset, new Ticket.GetClosedListHandler() {
     }
 });
 ```
+> `Ticket.getOpenedList()` and `Ticket.getClosedList()` have overloaded methods with `customFieldFilter` parameter. Once you set `customField` to tickets, you can put `customFieldFilter` to `getOpenedList()` and `getClosedList()` in order to filter the tickets by `customField` values.
 
 ## Confirming end of chat
 There are predefined rich messages on SendBird Desk and `Confirm end of chat` is one of them. For other rich messages, please refer to [Handling messages](#handling-messages).
