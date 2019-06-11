@@ -26,8 +26,8 @@ Installing the Desk SDK is a straightforward process if you're familiar with usi
 To install the Desk SDK using Gradle, add the following lines to your project-level `build.gradle` file.
 ```gradle
 repositories {
-    maven { url "https://raw.githubusercontent.com/smilefam/SendBird-SDK-Android/master/" }
-    maven { url "https://raw.githubusercontent.com/smilefam/SendBird-Desk-SDK-Android/master/" }
+    maven { url "https://raw.githubusercontent.com/sendbird/SendBird-SDK-Android/master/" }
+    maven { url "https://raw.githubusercontent.com/sendbird/SendBird-Desk-SDK-Android/master/" }
 }
 ```
 
