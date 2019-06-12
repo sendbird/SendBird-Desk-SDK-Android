@@ -20,7 +20,7 @@ Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBi
 ## Installation
 
 First of all, you need SendBird App ID to start (It can be created on [SendBird Dashboard](https://dashboard.sendbird.com), but for Desk usage, you may need upgrade.),
-so please contact [desk@sendbird.com](mailto:desk@sendbird.com) if you want to try Desk.
+so please contact [contact-sales](https://sendbird.com/contact-sales) if you want to try Desk.
 
 Installing the Desk SDK is a straightforward process if you're familiar with using external libraries or SDKs in your projects.
 To install the Desk SDK using Gradle, add the following lines to your project-level `build.gradle` file.
