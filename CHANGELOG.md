@@ -1,5 +1,12 @@
 ## Change Log
 
+### v1.0.4 (Jul 10, 2019)
+* Added `getCustomFields()` in Ticket.
+* Added `enum ThreadOption { UI_THREAD, NEW_THREAD, HANDLER }` in SendBirdDesk.Options.
+* Added `setThreadOption(ThreadOption threadOption, Handler handler)` in SendBirdDesk.Options.
+* Deprecated `useUiThreadForCallbacks(boolean tf)` in SendBirdDesk.Options.
+* Deprecated `setHandlerForCallbacks(Handler handler)` in SendBirdDesk.Options.
+
 ### v1.0.3 (Jun 21, 2019)
 * Added `useUiThreadForCallbacks(boolean tf)` in SendBirdDesk.Options.
 * Added `setHandlerForCallbacks(Handler handler)` in SendBirdDesk.Options.
