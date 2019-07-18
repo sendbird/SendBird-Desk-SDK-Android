@@ -116,6 +116,27 @@ Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
 });
 ```
 > `Ticket.create()` has a overloaded method with `groupKey` and `customField` parameters. The values could be evaluated when a ticket is created though it's used only in Dashboard currently. `groupKey` is the key of an agent group so that the ticket is assigned to the agents in that group. `customField` holds customizable data for the individual ticket.
+```java
+HashMap<String, String> customFields = new HashMap<>();
+customFields.put("text", "hello");
+customFields.put("number", "14");
+customFields.put("select", "option2");
+
+Ticket.create(ticketTitle, userName,
+        "cs-team-1",    // groupKey
+        customFields,   // customFields
+        new Ticket.CreateHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        // Ticket is created with groupKey "cs-team-1" and customFields.
+    }
+});
+```
+> Each key in `customFields` should be preregistered in Dashboard. Otherwise, the key would be ignored.
 
 ## Count of opened tickets
 When you need to display opened ticket count somewhere on your application, `Ticket.getOpenCount()` is useful.
