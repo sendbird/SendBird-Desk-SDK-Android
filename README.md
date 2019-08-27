@@ -10,12 +10,14 @@ Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBi
   1. [Installation](#installation)
   1. [Initialization](#initialization)
   1. [Authentication](#authentication)
+  1. [Setting customer customFields](#setting-customer-customfields)
   1. [Creating a new ticket](#creating-a-new-ticket)
   1. [Count of opened tickets](#count-of-opened-tickets)
   1. [Loading ticket list](#loading-ticket-list)
   1. [Confirming end of chat](#confirming-end-of-chat)
   1. [Handling ticket event](#handling-ticket-event)
   1. [Rich messages](#rich-messages)
+  1. [Ticket Feedback](#ticket-feedback)
   
 ## Installation
 
