@@ -35,7 +35,7 @@ And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.94'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.4'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.5'
 }
 ```
 
@@ -96,6 +96,32 @@ SendBird.connect(userId, accessToken, new SendBird.ConnectHandler() {
 ```
   
 Now your customers are ready to create chat tickets and start inquiry with your agents!
+
+## Setting customer customFields
+
+Customer information could be kept in `customFields`. 
+`setCustomerCustomFields()` in `SendBirdDesk` lets the SDK set the `customFields` of the current customer. 
+The `customFields` columns should be defined in SendBird Dashboard beforehand. 
+Otherwise, the setting would be ignored.
+
+```java
+Map<String, String> customFields = new HashMap<>();
+customFields.put("gender", "male");
+customFields.put("age", String.valueOf(20));
+
+SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
+    @Override
+    public void onResult(SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        
+        // customer's customFields is rightly set
+        // (or a certain key could get ignored if the key is not defined yet)
+    }
+});
+```
 
 ## Creating a new ticket
 
@@ -251,3 +277,20 @@ Its `UserMessage.getData()` has the following format:
 ```
 Therefore, when this type of message is received on `ChannelHandler.onMessageReceived()` or `channel.getPreviousMessagesByTimestamp()`, you can parse the data and use it for URL preview rendering.
 Also if you extract URL information from customers text, build above JSON, stringify it and then send it as custom data by `channel.sendUserMessage()`, agents can also see URL preview.
+
+## Ticket Feedback
+If Desk satisfaction feature is on, a message would come after closing the ticket. 
+The message is for getting customer feedback including score and comment. 
+The data of satisfaction form message looks like below.
+```
+{
+    "type": "SENDBIRD_DESK_CUSTOMER_SATISFACTION",
+    "body": {
+        "state": "WAITING" // also can have "CONFIRMED",
+        "customerSatisfactionScore": null, // or a number ranged in [1, 5]
+        "customerSatisfactionComment": null // or a string (optional)
+    }
+}
+```
+Once the customer inputs the score and the comment, the data could be submitted by calling `ticket.submitFeedback(message, score, comment, callback)`. 
+Then updated message is going to be sent in `ChannelHandler.onMessageUpdated(BaseChannel channel, BaseMessage message)`.

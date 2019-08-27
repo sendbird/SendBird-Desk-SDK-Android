@@ -1,5 +1,9 @@
 ## Change Log
 
+### v1.0.5 (Aug 27, 2019)
+* Added `setCustomerCustomFields(Map<String, String> customFields, SetCustomerCustomFieldsHandler handler)` in SendBirdDesk.
+* Added `submitFeedback(UserMessage message, int score, String comment, SubmitFeedbackHandler handler)` in Ticket.
+
 ### v1.0.4 (Jul 10, 2019)
 * Added `getCustomFields()` in Ticket.
 * Added `enum ThreadOption { UI_THREAD, NEW_THREAD, HANDLER }` in SendBirdDesk.Options.
