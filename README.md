@@ -36,8 +36,8 @@ repositories {
 And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.94'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.5'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.112'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.6'
 }
 ```
 
@@ -143,6 +143,19 @@ Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
     }
 });
 ```
+> `Ticket.create()` has a overloaded method with `Priority` parameters so you can set the priority of ticket as well.
+```java
+Ticket.create(ticketTitle, userName, Priority priority, new Ticket.CreateHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+           return;
+        }
+        // Now you can send messages to the ticket by ticket.getChannel().sendUserMessage() or sendFileMessage().
+    }
+});
+```
 > `Ticket.create()` has a overloaded method with `groupKey` and `customField` parameters. The values could be evaluated when a ticket is created though it's used only in Dashboard currently. `groupKey` is the key of an agent group so that the ticket is assigned to the agents in that group. `customField` holds customizable data for the individual ticket.
 ```java
 HashMap<String, String> customFields = new HashMap<>();
@@ -165,6 +178,53 @@ Ticket.create(ticketTitle, userName,
 });
 ```
 > Each key in `customFields` should be preregistered in Dashboard. Otherwise, the key would be ignored.
+
+## Setting Ticket customFields
+
+Ticket information could be kept in `customFields`. 
+`setCustomFields()` in `Ticket` lets the SDK set the `customFields` of the current ticket. 
+The `customFields` columns should be defined in SendBird Dashboard beforehand. 
+Otherwise, the setting would be ignored.
+
+```java
+Map<String, String> customFields = new HashMap<>();
+customFields.put("gender", "male");
+customFields.put("age", String.valueOf(20));
+
+ticket.setCustomFields(customFields, new Ticket.SetCustomFieldHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        
+        // ticket's customFields is rightly set
+        // (or a certain key could get ignored if the key is not defined yet)
+    }
+});
+```
+
+## Setting Ticket priority
+
+Ticket information could be kept in `Priority`. 
+`setTicketPriority()` in `Ticket` lets the SDK set the `Priority` of the current ticket. 
+If you didn't set the Priority of ticket the default `Priority` has been set to `Priority.MEDIUM`
+
+
+```java
+ticket.setTicketPriority(priority, new Ticket.SetTicketPriorityHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {
+            // Error handling.
+            return;
+        }
+        
+        // ticket's priority is rightly set
+    }
+});
+```
 
 ## Count of opened tickets
 When you need to display opened ticket count somewhere on your application, `Ticket.getOpenCount()` is useful.

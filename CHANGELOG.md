@@ -1,5 +1,9 @@
 ## Change Log
 
+### v1.0.6 (Jan 3, 2020)
+* Added `setCustomFields(Map<String, String> customFields, SetCustomFieldHandler handler)` in Ticket.
+* Added `setTicketPriority(Priority priority, final SetTicketPriorityHandler handler)` in Ticket.
+
 ### v1.0.5 (Aug 27, 2019)
 * Added `setCustomerCustomFields(Map<String, String> customFields, SetCustomerCustomFieldsHandler handler)` in SendBirdDesk.
 * Added `submitFeedback(UserMessage message, int score, String comment, SubmitFeedbackHandler handler)` in Ticket.
