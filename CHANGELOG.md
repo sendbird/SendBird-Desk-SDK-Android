@@ -1,5 +1,12 @@
 ## Change Log
 
+### v1.0.7 (Apr 27, 2020)
+* Added `create(String ticketTitle, String userName, String groupKey, Map<String, String> customFields, Priority priority, List<String> relatedChannelUrls, CreateHandler handler)` in Ticket.
+* Added `setRelatedChannelUrls(List<String> relatedChannelUrls, SetRelatedChannelUrlsHandler handler)` in Ticket.
+* Added `interface SetRelatedChannelUrlsHandler` in Ticket.
+* Added `getRelatedChannels()` in Ticket.
+* Added `class RelatedChannel` in Ticket.
+
 ### v1.0.6 (Jan 3, 2020)
 * Added `setCustomFields(Map<String, String> customFields, SetCustomFieldHandler handler)` in Ticket.
 * Added `setTicketPriority(Priority priority, final SetTicketPriorityHandler handler)` in Ticket.
