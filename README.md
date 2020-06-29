@@ -1,12 +1,21 @@
-SendBird Desk SDK Integration Guide for Android
-===========
+# Senbird Desk - QuickStart for Android
+
+## introduction
 SendBird Desk is a chat customer service platform built on SendBird SDK and API.
 
-Desk Android SDK provides customer-side integration on your own application, so you can easily implement **ticketing system with chat inquiry**.  
-Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBird Android SDK 3.0.55 or higher**.
+Desk Android SDK provides customer-side integration on your own application, so you can easily implement a ticketing system with chat inquiry, inquiries inbox with UI theming. 
+
+This repo was made to share a barebones quickstart implementation of how to use SendBird Desk.
+
+It goes through the steps of:
+- Connecting to SendBird
+- Connecting to SendBird Desk
+- Creating a Ticket
+- Retrieving Closed Tickets
 
 ## Table of Contents
 
+  1. [Create a Sendbird application](#create-a-sendbird-application)
   1. [Installation](#installation)
   1. [Initialization](#initialization)
   1. [Authentication](#authentication)
@@ -18,11 +27,18 @@ Desk Android SDK requires devices running **Android 4.0 or higher** and **SendBi
   1. [Handling ticket event](#handling-ticket-event)
   1. [Rich messages](#rich-messages)
   1. [Ticket Feedback](#ticket-feedback)
+
+## Prerequisites
+- Android 4.0 or later and SendBird Android SDK 3.0.55 or later
+
+## Create a Sendbird application
+  1. Login or Sign-up for an account at [dashboard](https://dashboard.sendbird.com/)
+  1. Create or select an application on the SendBird Dashboard.
+  1. Note the `Application ID` for future reference.
+  1. [Contact sales](https://sendbird.com/contact-sales) to get the `Desk` menu enabled in the dashboard. 
+  1. Sendbird Desk is available only for free-trial or Enterprise plan 
   
 ## Installation
-
-First of all, you need SendBird App ID to start (It can be created on [SendBird Dashboard](https://dashboard.sendbird.com), but for Desk usage, you may need upgrade.),
-so please contact [Sales](https://sendbird.com/contact-sales) if you want to try Desk.
 
 Installing the Desk SDK is a straightforward process if you're familiar with using external libraries or SDKs in your projects.
 To install the Desk SDK using Gradle, add the following lines to your project-level `build.gradle` file.
@@ -36,7 +52,7 @@ repositories {
 And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.112'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.136'
     implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.7'
 }
 ```
@@ -356,3 +372,6 @@ The data of satisfaction form message looks like below.
 ```
 Once the customer inputs the score and the comment, the data could be submitted by calling `ticket.submitFeedback(message, score, comment, callback)`. 
 Then updated message is going to be sent in `ChannelHandler.onMessageUpdated(BaseChannel channel, BaseMessage message)`.
+
+## Reference
+Please see the following link for Android Desk SDK Documentation https://github.com/sendbird/SendBird-Desk-iOS-Framework
