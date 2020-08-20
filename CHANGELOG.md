@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.0.8 (Aug 20, 2020)
+* Improved handling of error code and error messages on API failure.
+
 ### v1.0.7 (Apr 27, 2020)
 * Added `create(String ticketTitle, String userName, String groupKey, Map<String, String> customFields, Priority priority, List<String> relatedChannelUrls, CreateHandler handler)` in Ticket.
 * Added `setRelatedChannelUrls(List<String> relatedChannelUrls, SetRelatedChannelUrlsHandler handler)` in Ticket.

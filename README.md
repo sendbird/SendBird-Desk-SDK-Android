@@ -52,8 +52,8 @@ repositories {
 And then add the following lines to your app-level `build.gradle` file.
 ```gradle
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.136'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.7'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.141'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.8'
 }
 ```
 
