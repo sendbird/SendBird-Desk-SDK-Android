@@ -27,6 +27,7 @@ It goes through the steps of:
   1. [Handling ticket event](#handling-ticket-event)
   1. [Rich messages](#rich-messages)
   1. [Ticket Feedback](#ticket-feedback)
+  1. [Error codes](#error-codes)
 
 ## Prerequisites
 - Android 4.0 or later and SendBird Android SDK 3.0.55 or later
@@ -372,6 +373,14 @@ The data of satisfaction form message looks like below.
 ```
 Once the customer inputs the score and the comment, the data could be submitted by calling `ticket.submitFeedback(message, score, comment, callback)`. 
 Then updated message is going to be sent in `ChannelHandler.onMessageUpdated(BaseChannel channel, BaseMessage message)`.
+
+## Error Codes
+In case of an API request failure, the `SendBirdException` parameter in a handler will contain the information about the error.
+#### SendBirdException
+|Property|Description|
+|----|----|
+|code|`SendBirdError.ERR_REQUEST_FAILED (800220)`|
+|message|Detailed error message with specific error code, if exists.|
 
 ## Reference
 Please see the following link for Android Desk SDK Documentation https://github.com/sendbird/SendBird-Desk-iOS-Framework
