@@ -210,7 +210,7 @@ You can use the following parameters when creating a ticket.
 |TICKET_TITLE|string |Specifies the title of the ticket.|
 |USER_NAME|string |Specifies the name of the user who submits or receives the ticket.|
 |GROUP_KEY|string | Specifies the identifier of a specific team.|
-|customFields| [String:String]|Specifies additional information of the ticket that consists of **key-value** custom items. Only custom fields already registered in **Settings** > **Ticket** fields in your dashboard can be used as a key. |
+|customFields|nested object|Specifies additional information of the ticket that consists of **key-value** custom items. Only custom fields already registered in **Settings** > **Ticket** fields in your dashboard can be used as a key. |
 |PRIORITY |string |Specifies the priority value of the ticket. Higher values stand for higher priority. Valid values are **LOW**, **MEDIUM**, **HIGH** and **URGENT**. |
 |RELATED_CHANNEL_URLS|array | Specifies group channels in Sendbird Chat platform that are related to this ticket and consists of channel URLs and channel names. Up to 3 related channels can be added.|
 
