@@ -112,7 +112,7 @@ Alternatively, you can download the Desk SDK. Copy the Desk SDK into your ‘lib
 
 ## Creating your first ticket
 
-Follow the step-by-step instructions below to authenticate and create your first ticket.
+After installation has been completed, a ticket can be created for communication between an agent and customer. Follow the step-by-step instructions below to create your first ticket. 
 
 ### Step 1: Initialize the Desk SDK
 
