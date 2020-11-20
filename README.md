@@ -16,7 +16,7 @@
 
 ## Introduction
 
-Sendbird Desk enables strong customer engagement through live, in-app support. The Desk SDK lets you easily initialize, configure, and build customer support-related functionality into your iOS applications.
+Sendbird Desk enables strong customer engagement through live, in-app support. The Desk SDK lets you easily initialize, configure, and build customer support-related functionality into your Android applications.
 
 ### How it works
 
@@ -178,7 +178,7 @@ SendBird.connect(userId, accessToken, new SendBird.ConnectHandler() {
 });
 ```
 
-> **Note**: **Customers from Sendbird Chat platform** signifies users who are already authenticated with the Chat SDK. If you’re implementing Chat SDK and Desk SDK at the same time, [connect a user to Sendbird server with their user ID and access token](https://sendbird.com/docs/chat/v3/ios/guides/authentication) first.
+> **Note**: **Customers from Sendbird Chat platform** signifies users who are already authenticated with the Chat SDK. If you’re implementing Chat SDK and Desk SDK at the same time, [connect a user to Sendbird server with their user ID and access token](https://sendbird.com/docs/chat/v3/android/guides/authentication) first.
 
 ### Step 3: Create a ticket
 
