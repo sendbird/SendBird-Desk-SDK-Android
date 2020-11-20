@@ -271,7 +271,7 @@ ticket.setCustomFields(customFields, new Ticket.SetCustomFieldHandler() {
 
 Use the `setCustomerCustomFields()` method of the ‘SendBirdDesk’ to make your customers add additional information about themselves.
 
-> **Note**: Only custom fields registered in **Settings** > **Customer fields** of your dashboard can be used as a key.
+> **Note**: Only custom fields registered in **Desk** > **Settings** > **Customer fields** of your dashboard can be used as a key.
 
 ```java
 Map<String, String> customFields = new HashMap<>();
@@ -394,7 +394,7 @@ In the channel event handler's `onMessageUpdated()` method, you can find the dat
 
 Admin messages are customizable messages that are sent by the system, and there are 2 types of admin messages. **Notifications** are messages that are sent and displayed to both customers and agents, such as welcome messages or delay messages. **System messages** are messages sent and displayed to agents in the **Ticket details view** when a ticket has some changes, such as changes in ticket status and assignee.
 
-> **Note**: You can customize notifications in **Settings** > **Triggers**, and system messages in **Settings** > **System messages** in your dashboard.
+> **Note**: You can customize notifications in **Desk** > **Settings** > **Triggers**, and system messages in **Desk** > **Settings** > **System messages** in your dashboard.
 
 When the client app receives the message through the ‘onMessageReceived()’ method of the channel event handler, system messages are distinguished from notification messages by the value of the `message.custom_type`, and their subtype is specified in the `message.data` as below.
 
@@ -470,7 +470,7 @@ ticket.confirmEndOfChat(USER_MESSAGE, true|false, new Ticket.ConfirmEndOfChatHan
 
 ### Request customer feedback
 
-You can send a message to customers right after closing a ticket to ask whether they are satisfied with the support provided through the ticket. When the Customer satisfaction rating feature is turned on in your dashboard, customers will get a message asking to give a score and leave a comment as feedback. The message can have 2 states as below.
+You can send a message to customers right after closing a ticket to ask whether they are satisfied with the support provided through the ticket. When the **Customer satisfaction rating** feature is turned on in your dashboard, customers will get a message asking to give a score and leave a comment as feedback. The message can have 2 states as below.
 
 |State|Description|
 |---|---|
