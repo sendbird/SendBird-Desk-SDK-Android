@@ -408,7 +408,7 @@ When the client app receives the message through the ‘onMessageReceived()’ m
 }
 ```
 
-> **Note**: The `transfer` appears only when the `data` property is `SYSTEM_MESSAGE_TICKET_TRANSFERRED_BY_AGENT`.
+> **Note**: The `transfer` appears only when the `data` has `SYSTEM_MESSAGE_TICKET_TRANSFERRED_BY_AGENT`.
 
 System messages are intended to be displayed for agents only. Refer to the following sample code to avoid displaying them to your customers.
 
