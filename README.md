@@ -265,7 +265,7 @@ ticket.setCustomFields(customFields, new Ticket.SetCustomFieldHandler() {
 });
 ```
 
-> **Note**: Only custom fields registered in **Settings** > **Ticket fields** of your dashboard can be used as a key.
+> **Note**: Only custom fields registered in **Desk** > **Settings** > **Ticket fields** of your dashboard can be used as a key.
 
 ### Add custom information to a customer
 
