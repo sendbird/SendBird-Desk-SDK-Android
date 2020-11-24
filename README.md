@@ -525,7 +525,7 @@ public void onMessageUpdated(final BaseChannel channel, final BaseMessage messag
 }
 ```
 
-> **Note**: You can find the stringified ‘JSON’ object of the following in the `message.data` property within the `onMessageUpdate()` method of the channel event handler.
+> **Note**: You can find the stringified `JSON` object of the following in the `message.data` property within the `onMessageUpdate()` method of the channel event handler.
 
 ```json
 {
@@ -647,7 +647,7 @@ Ticket.getOpenCount(new Ticket.GetOpenCountHandler() {
 
 ### Error Codes
 
-In case of an API request failure, the SendBirdException parameter in a handler will contain the information about the error.
+In case of an API request failure, the `SendBirdException` parameter in a handler will contain the information about the error.
 
 #### - SendBirdException
 
