@@ -20,7 +20,7 @@
 
 ### How it works
 
-Sendbird Desk is a plugin of the [Sendbird Chat Platform](https://sendbird.com/docs/chat) for managing tickets, and thus Desk events are handled by event handlers through the [Chat SDK](https://github.com/sendbird/sendbird-ios-framework). 
+Sendbird Desk is a plugin of the [Sendbird Chat Platform](https://sendbird.com/docs/chat) for managing tickets, and thus Desk events are handled by event handlers through the [Chat SDK](https://github.com/sendbird/SendBird-SDK-Android). 
 
 Every ticket is assigned appropriate agents and will be directed to a chat's group channel, which implements real-time messaging on tickets with Sendbird Chat SDK. 
 
