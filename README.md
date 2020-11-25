@@ -1,67 +1,123 @@
-# Senbird Desk - QuickStart for Android
+# [Sendbird](https://sendbird.com) Desk SDK for Android
 
-## introduction
-SendBird Desk is a chat customer service platform built on SendBird SDK and API.
+![Platform](https://img.shields.io/badge/platform-ANDROID-orange.svg)
+![Languages](https://img.shields.io/badge/language-JAVA-orange.svg)
 
-Desk Android SDK provides customer-side integration on your own application, so you can easily implement a ticketing system with chat inquiry, inquiries inbox with UI theming. 
+## Table of contents
 
-This repo was made to share a barebones quickstart implementation of how to use SendBird Desk.
+  1. [Introduction](#introduction)
+  1. [Before getting started](#before-getting-started)
+  1. [Getting started](#getting-started)
+  1. [Creating your first ticket](#creating-your-first-ticket)
+  1. [Implementation guide](#implementation-guide)
 
-It goes through the steps of:
-- Connecting to SendBird
-- Connecting to SendBird Desk
-- Creating a Ticket
-- Retrieving Closed Tickets
-
-## Table of Contents
-
-  1. [Create a Sendbird application](#create-a-sendbird-application)
-  1. [Installation](#installation)
-  1. [Initialization](#initialization)
-  1. [Authentication](#authentication)
-  1. [Setting customer customFields](#setting-customer-customfields)
-  1. [Creating a new ticket](#creating-a-new-ticket)
-  1. [Count of opened tickets](#count-of-opened-tickets)
-  1. [Loading ticket list](#loading-ticket-list)
-  1. [Confirming end of chat](#confirming-end-of-chat)
-  1. [Handling ticket event](#handling-ticket-event)
-  1. [Rich messages](#rich-messages)
-  1. [Ticket Feedback](#ticket-feedback)
-  1. [Error codes](#error-codes)
-
-## Prerequisites
-- Android 4.0 or later and SendBird Android SDK 3.0.55 or later
-
-## Create a Sendbird application
-  1. Login or Sign-up for an account at [dashboard](https://dashboard.sendbird.com/)
-  1. Create or select an application on the SendBird Dashboard.
-  1. Note the `Application ID` for future reference.
-  1. [Contact sales](https://sendbird.com/contact-sales) to get the `Desk` menu enabled in the dashboard. 
-  1. Sendbird Desk is available only for free-trial or Enterprise plan 
   
-## Installation
+<br />
 
-Installing the Desk SDK is a straightforward process if you're familiar with using external libraries or SDKs in your projects.
-To install the Desk SDK using Gradle, add the following lines to your project-level `build.gradle` file.
-```gradle
+## Introduction
+
+**Sendbird Desk** enables strong customer engagement through live, in-app support. The Desk SDK lets you easily initialize, configure, and build customer support-related functionality into your Android applications.
+
+### How it works
+
+Sendbird Desk is a plugin of the [Sendbird Chat Platform](https://sendbird.com/docs/chat) for managing tickets, and thus Desk events are handled by event handlers through the [Chat SDK](https://github.com/sendbird/SendBird-SDK-Android). 
+
+Every ticket is assigned appropriate agents and will be directed to a chat's group channel, which implements real-time messaging on tickets with Sendbird Chat SDK. 
+
+### Concepts
+
+These are a few of the main components of Desk SDK. 
+
+- **Channels**: The various ways through which support can be requested e.g. in-app chats from different OS platforms or social media like Facebook and Instagram.
+- **Tickets**: A ticket is created when a customer and agent start a conversation and is seen as a unit of customer’s inquiry. There are five types of tickets.
+- **Agents**: An agent receives the requests and also handles the conversation in the [Sendbird Dashboard](https://dashboard.sendbird.com/auth/signin). 
+- **Admins**: Admins are agents who are granted the additional privileges of managing the overall dashboard settings and the tickets. 
+- **Messages**: Desk has two types of messages that fall into further subtypes. The following table shows the hierarchical structure of messages. 
+
+||Sender|Subtypes|
+|---|---|---|
+| User message| Agent or customer|Rich messages |
+| Admin message |Sent from the Desk server without a specific sender |Notification messages and System messages |
+
+> **Note**: Rich messages are further classified into [URL preview](#add-url-previews), [confirmation request for ticket closing](#request-confirmation-to-close-a-ticket), and [feedback request](#request-customer-feedback) messages. 
+
+### More about Sendbird Desk SDK for Android
+
+Find out more about Sendbird Desk SDK for Android on [Desk SDK for Android doc](https://sendbird.com/docs/desk/v1/android/getting-started/about-desk-sdk). If you have any comments or questions regarding bugs and feature requests, visit [Sendbird community](https://community.sendbird.com).
+
+<br />
+
+## Before getting started
+
+This section shows the prerequisites you need to check to use Sendbird Desk SDK for Android.
+
+### Requirements
+
+- `Android 4.0 (API level 14) or later`
+- `Java 7 or later`
+- `Gradle 3.4.0 or later`
+
+<br />
+
+## Getting started
+
+This section gives you information you need to get started with Sendbird Desk SDK for Android. 
+
+### Try the sample app
+
+Our sample app demonstrates the core features of Sendbird Desk SDK. Download the app from our GitHub repository to get an idea of what you can do with the actual SDK and to get started building your own project.
+ 
+- https://github.com/sendbird/quickstart-desk-android
+
+### Step 1: Create a Sendbird application from your dashboard
+
+A Sendbird application comprises everything required in a chat service including users, message, and channels. To create an application:
+
+1. Go to the Sendbird Dashboard and enter your email and password, and create a new account. You can also sign up with a Google account.
+2. When prompted by the setup wizard, enter your organization information to manage Sendbird applications.
+3. Lastly, when your dashboard home appears after completing setup, click **Create +** at the top-right corner.
+
+Regardless of the platform, only one Sendbird application can be integrated per app; however, the application supports communication across all Sendbird’s provided platforms without any additional setup. 
+
+> **Note**: All the data is limited to the scope of a single application, thus users in different Sendbird applications are unable to chat with each other.
+
+### Step 2: Download and install the Desk SDK
+
+Installing the Desk SDK is simple if you’re familiar with using external libraries or SDKs in your projects. You can install using the following three methods. 
+
+#### - Project level
+
+```bash
 repositories {
     maven { url "https://raw.githubusercontent.com/sendbird/SendBird-SDK-Android/master/" }
     maven { url "https://raw.githubusercontent.com/sendbird/SendBird-Desk-SDK-Android/master/" }
 }
 ```
 
-And then add the following lines to your app-level `build.gradle` file.
-```gradle
+#### - App Level
+
+```bash
+// Add the following dependency to the build.gradle file at the app level.
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.141'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.8'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.151'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.9'
 }
 ```
 
-## Initialization
+#### - Download SDK 
 
-Invoke `SendBird.init()` with your SendBird App ID just like when you initialize SendBird SDK and then
-call `SendBirdDesk.init()` to use SendBird Desk SDK's features. Please be sure to initialize SendBird SDK before SendBirdDesk SDK.
+Alternatively, you can download the Desk SDK. Copy the Desk SDK into your ‘libs/’ folder, and make sure you include the library in your ‘build.gradle’ file as well.
+
+<br />
+
+## Creating your first ticket
+
+After installation has been completed, a ticket can be created for communication between an agent and customer. Follow the step-by-step instructions below to create your first ticket. 
+
+### Step 1: Initialize the Desk SDK
+
+First, a ‘SendBirdDesk’ instance must be initialized when launching a client app. Call the ‘SendBird.init()’ and the ‘SendBirdDesk.init()’ on the ‘Application.onCreate()’. The Sendbird.init() should be initialized first by the APP_ID of your Sendbird application in the dashboard.  
+
 ```java
 public class MyApplication extends Application {
     @Override
@@ -73,314 +129,532 @@ public class MyApplication extends Application {
 }
 ```
 
-> Calling `SendBird.init()` and `SendBirdDesk.init()` on `Application.onCreate()` is highly recommended.
+> **Note**: The same `APP_ID` should be used for both Desk and Chat SDKs. If you initiate the Sendbird Desk with a Sendbird instance of another `App_ID`, all existing data in the client app will be cleared. 
 
-> Even you use SendBird Desk SDK, you have to handle chat messages thru SendBird SDK. SendBird Desk SDK provides add-on features like chat ticket creation and loading chat tickets.
-Ticket is the concept that does not exist on SendBird SDK and newly introduced on SendBird Desk SDK to support customer service ticketing system.
-Every ticket created will be assigned to the appropriate agents and it will have a mapping channel of SendBird SDK, so you can implement real-time messaging on tickets with SendBird SDK.
-> While using SendBird Desk SDK, it is also possible that you implement your own chat service using SendBird SDK.
-For example, if you are operating an on-demand service, you can add an in-app messenger (for your platform users) as well as customer service chat (between users and agents)
-into your application or website by combination of SendBird SDK and SendBird Desk SDK.
+It is possible to use the Chat SDK only or both Chat and Desk SDKs together in your client app depending on the chat service you want to provide.
 
+|SDK|Used for|
+|---|---|
+|Chat SDK|In-app messenger where customers can chat with each other.|
+|Chat and Desk SDKs|Tickets where customers can chat with agents.|
 
-## Authentication
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SendBird.init(APP_ID, this);
+        SendBirdDesk.init();
+    }
+}
+```
 
-After initialization, connecting to SendBird's server by SendBird SDK is required for real-time messaging. 
-This part is fully described on [SendBird SDK guide docs](https://docs.sendbird.com/android#authentication_2_authentication).
-Authentication of SendBird Desk `SendBirdDesk.authenticate()` is also a mandatory for you to use ticket related features.
-Below is an example for SendBird SDK connection and SendBird Desk SDK authentication.
+### Step 2: Authenticate to Sendbird server 
+
+Customers can request support from various types of channels: in-app chats or social media such as Facebook, Instagram and Twitter. To use these support features of Desk SDK, the `SendBirdDesk` instance should be connected with Sendbird server depending on which channel the request is from: 
+
+- **Sendbird Chat Platform**: Authenticate using the `authenticate()` method with their user IDs. 
+- **Social media platforms**: No authentication needed as customers are automatically registered in the dashboard with their social media accounts.
+
+Once authenticated, customers can live-chat with agents based on Sendbird Chat platform.
+
 ```java
 SendBird.connect(userId, accessToken, new SendBird.ConnectHandler() {
     @Override
     public void onConnected(User user, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
+        if (e != null) {    // error. 
             return;
         }
-
-        // Use the same user Id and access token used on SendBird.connect.
+        // Use the same user Id and access token used in the SendBird.connect().
         SendBirdDesk.authenticate(userId, accessToken, new SendBirdDesk.AuthenticateHandler() {
             @Override
             public void onResult(SendBirdException e) {
-                if (e != null) {
-                    // Error handling.
+                if (e != null) {    //error.
                     return;
                 }
-                
-                // Now you can create a ticket, get open ticket count and load tickets.
+
+            // SendBirdDesk is now initialized, and the customer is authenticated.
             }
         });
     }
 });
 ```
-  
-Now your customers are ready to create chat tickets and start inquiry with your agents!
 
-## Setting customer customFields
+> **Note**: **Customers from Sendbird Chat platform** signifies users who are already authenticated with the Chat SDK. If you’re implementing Chat SDK and Desk SDK at the same time, [connect a user to Sendbird server with their user ID and access token](https://sendbird.com/docs/chat/v3/android/guides/authentication) first.
 
-Customer information could be kept in `customFields`. 
-`setCustomerCustomFields()` in `SendBirdDesk` lets the SDK set the `customFields` of the current customer. 
-The `customFields` columns should be defined in SendBird Dashboard beforehand. 
-Otherwise, the setting would be ignored.
+### Step 3: Create a ticket
 
-```java
-Map<String, String> customFields = new HashMap<>();
-customFields.put("gender", "male");
-customFields.put("age", String.valueOf(20));
+Implement the `Ticket.create()` method to create a new ticket either before or after the customer’s initial message. 
 
-SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
-    @Override
-    public void onResult(SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-            return;
-        }
-        
-        // customer's customFields is rightly set
-        // (or a certain key could get ignored if the key is not defined yet)
-    }
-});
-```
-
-## Creating a new ticket
-
-Creating a new ticket is as simple as just calling `Ticket.create()`. Ticket title and user name can be passed at the same time.
-The returned ticket will have a channel instance which can be accessed by `ticket.getChannel()`. So you can send messages to the channel using SendBird SDK.
-For more detail of sending messages to channel, please refer to [SendBird SDK guide docs](https://docs.sendbird.com/android#group_channel_3_sending_messages).
-Please notice that only after customers sending at least one message to the ticket, the ticket will be routed to the online agents so they can answer it.
 ```java
 Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
     @Override
     public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-           return;
+    if (e != null) {    // error
+        return;
         }
-        // Now you can send messages to the ticket by ticket.getChannel().sendUserMessage() or sendFileMessage().
+
+        // The ticket is created. Agents and customers can chat with each other by sending a message through the ticket.getChannel().sendUserMessage() or sendFileMessage().
     }
 });
 ```
-> `Ticket.create()` has a overloaded method with `Priority` parameters so you can set the priority of ticket as well.
-```java
-Ticket.create(ticketTitle, userName, Priority priority, new Ticket.CreateHandler() {
-    @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-           return;
-        }
-        // Now you can send messages to the ticket by ticket.getChannel().sendUserMessage() or sendFileMessage().
-    }
-});
-```
-> `Ticket.create()` has a overloaded method with `groupKey` and `customField` parameters. The values could be evaluated when a ticket is created though it's used only in Dashboard currently. `groupKey` is the key of an agent group so that the ticket is assigned to the agents in that group. `customField` holds customizable data for the individual ticket.
-```java
-HashMap<String, String> customFields = new HashMap<>();
-customFields.put("text", "hello");
-customFields.put("number", "14");
-customFields.put("select", "option2");
+ 
+Once a ticket is successfully created on the Sendbird server, you can access the ticket and its channel in the `ticket.getChannel()` through the callback from the server. 
 
-Ticket.create(ticketTitle, userName,
-        "cs-team-1",    // groupKey
-        customFields,   // customFields
-        new Ticket.CreateHandler() {
-    @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-            return;
-        }
-        // Ticket is created with groupKey "cs-team-1" and customFields.
-    }
-});
-```
-> Each key in `customFields` should be preregistered in Dashboard. Otherwise, the key would be ignored.
+Before a customer sends the first message, agents can’t see the ticket in the dashboard and ticket assignment does not occur. When conversation starts, the ticket is assigned to an available agent by the Desk Dashboard while messages are sent and received through the Chat SDK.
 
-## Setting Ticket customFields
+You can use the following parameters when creating a ticket.
 
-Ticket information could be kept in `customFields`. 
-`setCustomFields()` in `Ticket` lets the SDK set the `customFields` of the current ticket. 
-The `customFields` columns should be defined in SendBird Dashboard beforehand. 
-Otherwise, the setting would be ignored.
+> **Note**: Only Groupkey and customFields need to be defined and are only accessible from the Dashboard. 
+
+|Argument|Type|Description|
+|---|---|---|
+|TICKET_TITLE|string |Specifies the title of the ticket.|
+|USER_NAME|string |Specifies the name of the user who submits or receives the ticket.|
+|GROUP_KEY|string | Specifies the identifier of a specific team.|
+|customFields|nested object|Specifies additional information of the ticket that consists of **key-value** custom items. Only custom fields already registered in **Settings** > **Ticket** fields in your dashboard can be used as a key. |
+|PRIORITY |string |Specifies the priority value of the ticket. Higher values stand for higher priority. Valid values are **LOW**, **MEDIUM**, **HIGH** and **URGENT**. |
+|RELATED_CHANNEL_URLS|array | Specifies group channels in Sendbird Chat platform that are related to this ticket and consists of channel URLs and channel names. Up to 3 related channels can be added.|
 
 ```java
 Map<String, String> customFields = new HashMap<>();
-customFields.put("gender", "male");
-customFields.put("age", String.valueOf(20));
+customFields.put("product", "desk");
+customFields.put("line", "14");
+customFields.put("select", "option2");
+
+Ticket.create(TICKET_TITLE, USER_NAME,
+    "cs-team-1",                // GROUP_KEY
+    customFields,               // CUSTOM_FIELDS
+    PRIORITY,
+    RELATED_CHANNEL_URLS,
+    new Ticket.CreateHandler() {
+        @Override
+        public void onResult(Ticket ticket, SendBirdException e) {
+            if (e != null) {    // Error.
+                return;
+            }
+            // The ticket is created with parameters.
+        }
+    }
+);
+```
+
+<br />
+
+## Implementation guide
+
+This section details the procedure to handle and close a ticket from your client app. 
+
+### Add custom information to a ticket
+
+Use the `ticket.setCustomFields()` method to add additional information about a specific ticket.
+
+```java
+Map<String, String> customFields = new HashMap<>();
+customFields.put("product", "Desk");
+customFields.put("line", String.valueOf(30));
 
 ticket.setCustomFields(customFields, new Ticket.SetCustomFieldHandler() {
     @Override
     public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
+        if (e != null) {    // Error.
             return;
         }
-        
-        // ticket's customFields is rightly set
-        // (or a certain key could get ignored if the key is not defined yet)
+
+        // Custom fields for the ticket are set.
+        // Some fields can be ignored if their keys aren't registered in the dashboard.
     }
 });
 ```
 
-## Setting Ticket priority
+> **Note**: Only custom fields registered in **Desk** > **Settings** > **Ticket fields** of your dashboard can be used as a key.
 
-Ticket information could be kept in `Priority`. 
-`setTicketPriority()` in `Ticket` lets the SDK set the `Priority` of the current ticket. 
-If you didn't set the Priority of ticket the default `Priority` has been set to `Priority.MEDIUM`
+### Add custom information to a customer
 
+Use the `setCustomerCustomFields()` method of the ‘SendBirdDesk’ to make your customers add additional information about themselves.
+
+> **Note**: Only custom fields registered in **Desk** > **Settings** > **Customer fields** of your dashboard can be used as a key.
 
 ```java
-ticket.setTicketPriority(priority, new Ticket.SetTicketPriorityHandler() {
+Map<String, String> customFields = new HashMap<>();
+customFields.put("gender", "female");
+customFields.put("age", String.valueOf(30));
+
+SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
+    public void onResult(SendBirdException e) {
+        if (e != null) {    // Error.
             return;
         }
-        
-        // ticket's priority is rightly set
+
+        // Custom fields for the customer are set.
+        // Some fields can be ignored if their keys aren't registered in the dashboard.
     }
 });
 ```
 
-## Count of opened tickets
-When you need to display opened ticket count somewhere on your application, `Ticket.getOpenCount()` is useful.
+### Add custom information to a customer
+
+Use the `setCustomerCustomFields()` method of the `SendBirdDesk` to make your customers add additional information about themselves.
+
+> **Note**: Only custom fields registered in **Settings** > **Customer fields** of your dashboard can be used as a key.
+
+```java
+Map<String, String> customFields = new HashMap<>();
+customFields.put("gender", "female");
+customFields.put("age", String.valueOf(30));
+
+SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
+    @Override
+    public void onResult(SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+
+        // Custom fields for the customer are set.
+        // Some fields can be ignored if their keys aren't registered in the dashboard.
+    }
+});
+```
+
+### Add related channels
+
+Related channels indicate group channels in Sendbird Chat platform that are related to a ticket. When creating a ticket, pass the `channel_url`s of the related group channels as an argument to the `relatedChannelUrls` parameter in the `Ticket.create()` method. To update related channels, use the `ticket.setRelatedChannelUrls()` instead. The `ticket.relatedChannels` property in the callback indicates the group channel object of related channels and it contains channel names and their URLs.
+
+```java
+ticket.setRelatedChannelUrls(RELATED_CHANNEL_URLS, new Ticket.SetRelatedChannelUrlsHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+
+        // The ticket.relatedChannels property has been updated.
+    }
+});
+```
+
+> **Note**: Up to 3 related channels can be added per ticket.
+
+### Add URL previews
+
+With URL previews, your application users can meet their expectations of what they’re going to get before they open the link during the conversations.
+
+To preview URLs, every text message should be checked if it includes any URLs. When a text message including a URL is successfully sent, the URL should be extracted and passed to Sendbird server using the `getUrlPreview()` method. Set the parsed data received from the server as a `JSON` object and stringify the object to pass it as an argument to a parameter in the `updateUserMessage()` method. Then the updated message with URL preview is delivered to the client apps through the `onMessageUpdated()` method of the channel event handler.
+
+```java
+ticket.getChannel().sendUserMessage(TEXT, new BaseChannel.SendUserMessageHandler() {
+    @Override
+    public void onSent(UserMessage userMessage, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }   
+        ...
+        
+        List<String> urls = extractUrlsFromMessage(userMessage.getMessage());
+        if (urls.size() > 0) {
+            String strUrlPreview = toJsonString(getOGTagsWithUrl(urls.get(0)));
+            ticket.getChannel().updateUserMessage(
+                userMessage.getMessageId(), 
+                TEXT, 
+                strUrlPreview, 
+                "SENDBIRD_DESK_RICH_MESSAGE", 
+                new BaseChannel.UpdateUserMessageHandler() {
+                    @Override
+                    public void onUpdated(UserMessage userMessage, SendBirdException e) {
+                        if (e != null) {    // Error.
+                            return;
+                        }
+                         
+                        ... 
+                    }
+                }
+            );
+        } 
+    }
+});
+```
+
+> **Note**: Go to [Github page](https://github.com/sendbird/quickstart-desk-android) and refer to the `updateUserMessageWithUrl()` and `UrlPreviewAsyncTask` class in the sample code. You’ll get an idea on how to implement methods in the above sample code, such as the `extractUrlsFromMessage()`, `getOGTagsWithUrl()`, and `toJsonString()`, which aren’t actual code but intended to help you understand the overall flow to use URL previews.
+
+In the channel event handler's `onMessageUpdated()` method, you can find the data for URL preview in the `message.data` property as below.
+
+```json
+{
+    "type": "SENDBIRD_DESK_URL_PREVIEW",
+    "body": {
+        "url": "https://sendbird.com/",
+        "site_name": "Sendbird",
+        "title": "Sendbird - A Complete Chat Platform, Messaging and Chat SDK and API",
+        "description": "Sendbird's chat, voice and video APIs and SDKs connect users through immersive, modern communication solutions that drive better user experiences and engagement.",
+        "image": "https://6cro14eml0v2yuvyx3v5j11j-wpengine.netdna-ssl.com/wp-content/uploads/sendbird_thumbnail.png"
+    }
+}
+```
+ 
+### Receive system messages
+
+Admin messages are customizable messages that are sent by the system, and there are 2 types of admin messages. **Notifications** are messages that are sent and displayed to both customers and agents, such as welcome messages or delay messages. **System messages** are messages sent and displayed to agents in the **Ticket details view** when a ticket has some changes, such as changes in ticket status and assignee.
+
+> **Note**: You can customize notifications in **Desk** > **Settings** > **Triggers**, and system messages in **Desk** > **Settings** > **System messages** in your dashboard.
+
+When the client app receives the message through the ‘onMessageReceived()’ method of the channel event handler, system messages are distinguished from notification messages by the value of the `message.custom_type`, and their subtype is specified in the `message.data` as below.
+
+```json
+{
+    "message_id" : 40620745,
+    "type": "ADMM",
+    "custom_type": "SENDBIRD_DESK_ADMIN_MESSAGE_CUSTOM_TYPE",
+    "data": "{\"type\": \"SYSTEM_MESSAGE_TICKET_ASSIGNED_BY_SYSTEM\", \"ticket\": <Ticket Object>}",
+    "message": "The ticket is automatically assigned to Cindy."
+}
+```
+
+> **Note**: The `transfer` appears only when the `data` has `SYSTEM_MESSAGE_TICKET_TRANSFERRED_BY_AGENT`.
+
+System messages are intended to be displayed for agents only. Refer to the following sample code to avoid displaying them to your customers.
+
+```java
+public static boolean isVisible(BaseMessage message) {
+    if (message instanceof AdminMessage) {
+        String data = message.getData();
+        if (!TextUtils.isEmpty(data)) {
+            String customType = message.getCustomType();
+            boolean isSystemMessage = ADMIN_MESSAGE_CUSTOM_TYPE.equals(customType);
+            
+            JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+            String type = dataObj.get("type").getAsString();
+            
+            return !isSystemMessage
+                && !EVENT_TYPE_ASSIGN.equals(type)
+                && !EVENT_TYPE_TRANSFER.equals(type)
+                && !EVENT_TYPE_CLOSE.equals(type);
+        }
+    }
+    
+    return true;
+}
+```
+
+### Request confirmation to close a ticket
+
+While admins have permission to directly close a ticket, agents can either close a ticket as admins do or ask customers whether to close a ticket, depending on the agent permission setting. The confirmation request message can have 3 types of state as below.
+
+|State|Description|
+|---|---|
+|WAITING |Set when an agent sends a confirmation request message. |
+|CONFIRMED| Set when a customer agrees to close the ticket. (Default: **true**)|
+|DECLINED |Set when a customer declines to close the ticket. (Default: **false**)|
+
+When a customer replies to the message, the response true (agree) or false (decline) is sent to Sendbird server as `CONFIRMED` or `DECLINED` by calling the `Ticket.confirmEndOfChat()` method.
+
+```java
+ticket.confirmEndOfChat(USER_MESSAGE, true|false, new Ticket.ConfirmEndOfChatHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+        
+        // You can update the UI of the message. For example, you can hide YES and No buttons.
+    }
+});
+```
+
+```json
+{
+    "type": "SENDBIRD_DESK_INQUIRE_TICKET_CLOSURE",
+    "body": {
+        "state": "CONFIRMED"
+    }
+}
+```
+
+### Request customer feedback
+
+You can send a message to customers right after closing a ticket to ask whether they are satisfied with the support provided through the ticket. When the **Customer satisfaction rating** feature is turned on in your dashboard, customers will get a message asking to give a score and leave a comment as feedback. The message can have 2 states as below.
+
+|State|Description|
+|---|---|
+|WAITING|Set when an agent sends a customer feedback request message.|
+|CONFIRMED|Set when a customer sends a response.|
+
+When a customer replies to the message, their score and comment for the ticket are sent to the Desk server by calling the `ticket.submitFeedback()` method. Then, the state of the confirmation request message is changed to `CONFIRMED`.
+
+```java
+
+ticket.submitFeedback(USER_MESSAGE, SCORE, COMMENT, net Ticket.SubmitFeedbackHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+        ...   
+    }
+});
+
+```
+
+Sendbird Desk server notifies the customer’s client app of updates through the `onMessageUpdate()` method of the channel event handler.
+
+```java
+public void onMessageUpdated(final BaseChannel channel, final BaseMessage message) {
+    Ticket.getByChannelUrl(channel.getUrl(), new Ticket.GetByChannelUrlHandler() {
+        @Override
+        public void onResult(Ticket ticket, SendBirdException e) {
+            if (e != null) return;
+
+            String data = message.getData();
+            if (!TextUtils.isEmpty(data)) {
+                JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+                String type = dataObj.get("type").getAsString();
+                boolean isFeedbackMessage = "SENDBIRD_DESK_CUSTOMER_SATISFACTION".equals(type);
+                if (isFeedbackMessage) {
+                    JsonObject feedback = dataObj.get("body").getAsJsonObject();
+                    String state = feedback.get("state").getAsString();
+                    switch (state) {
+                        case "CONFIRMED":
+                            // TODO: Implement your code for the UI when there is a response from the customer.
+                            break;
+                        case "WAITING":
+                            // TODO: Implement your code for the UI when there is no response from the customer.
+                            break;
+                    }
+                }
+            }
+        }
+    });
+}
+```
+
+> **Note**: You can find the stringified `JSON` object of the following in the `message.data` property within the `onMessageUpdate()` method of the channel event handler.
+
+```json
+{
+    "type": "SENDBIRD_DESK_CUSTOMER_SATISFACTION",
+    "body": {
+        "state": "CONFIRMED",
+        "customerSatisfactionScore": 3,                           
+        "customerSatisfactionComment": "It was really helpful :)"
+    }
+}
+```
+
+### Reopen a closed ticket
+
+A closed ticket can be reopened by using the `reopen()` method in the `Ticket`.
+
+```java
+ticket.reopen(new Ticket.ReopenHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+        ... 
+     
+    }
+});
+```
+
+### Retrieve a list of tickets
+
+You can retrieve a list of the current customer’s open and closed tickets by using the `Ticket.getOpenedList()` and `Ticket.getClosedList()`.
+
+You can design an inbox activity for open tickets and closed tickets history for your customer. Zero is a good start value, then the maximum 10 tickets will be returned for each call by last message creation time descending order. 
+
+> **Note**: Only 10 tickets can be retrieved per request by message creation time in descending order.
+
+```java
+// getOpenedList()
+Ticket.getOpenedList(OFFSET, new Ticket.GetOpenedListHandler() {
+    @Override
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+
+        // offset += tickets.size(); for the next tickets.
+        // TODO: Implement your code to display the ticket list. 
+    }
+});
+```
+
+```java
+// getClosedList() 
+Ticket.getClosedList(OFFSET, new Ticket.GetClosedListHandler() {
+    @Override
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+
+        // offset += tickets.size(); for the next tickets.
+        // TODO: Implement your code to display the ticket list. 
+    }
+});
+```
+
+For tickets set with custom fields, you can add a filter to the `getOpenList()` and `getClosedList()` to sort tickets by keys and values of custom fields.
+
+```java
+Map<String, String> customFieldFilter = new HashMap<>();
+customFieldFilter.put("subject", "doggy_doggy");
+
+Ticket.getOpenedList(OFFSET, customFieldFilter, new Ticket.GetOpenedListHandler() {
+    @Override
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+
+        List<Ticket> openedTicket = tickets;
+        // offset += tickets.length; for the next tickets.
+        // TODO: Implement your code to display the ticket list.
+    }
+});
+```
+
+### Retrieve a ticket
+
+You can retrieve a specific ticket with its channel URL.
+
+```java
+Ticket.getByChannelUrl(channel.getUrl(), new Ticket.GetByChannelUrlHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+    }
+});
+```
+
+### Display open ticket count
+
+You can display the number of open tickets on your client app by using the `Ticket.getOpenCount()`.
+
 ```java
 Ticket.getOpenCount(new Ticket.GetOpenCountHandler() {
     @Override
     public void onResult(int count, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
+        if (e != null) {    // Error.
             return;
         }
 
+        // TODO: Implement your code with the result value.
     }
 });
 ```
 
-## Loading ticket list
-Usually you will design `Inbox` activity for open tickets and closed tickets history for your customer.
-Open tickets and closed tickets can be loaded from `Ticket.getOpenedList()` and `Ticket.getClosedList()`.
-Zero is a good start value of the offset, then the maximum 10 tickets will be returned for each call by last message creation time descending order.
-Open ticket list and closed ticket list can be loaded like below:
-```java
-Ticket.getOpenedList(offset, new Ticket.GetOpenedListHandler() {
-    @Override
-    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-            return;
-        }
+### Error Codes
 
-        // offset += tickets.size(); for the next tickets.
-        // This is the best place you display tickets on inbox. 
-    }
-});
-```
-
-```java
-Ticket.getClosedList(offset, new Ticket.GetClosedListHandler() {
-    @Override
-    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-            return;
-        }
-        
-        // offset += tickets.size(); for the next tickets.
-        // This is the best place you display tickets on inbox. 
-    }
-});
-```
-> `Ticket.getOpenedList()` and `Ticket.getClosedList()` have overloaded methods with `customFieldFilter` parameter. Once you set `customField` to tickets, you can put `customFieldFilter` to `getOpenedList()` and `getClosedList()` in order to filter the tickets by `customField` values.
-
-## Confirming end of chat
-There are predefined rich messages on SendBird Desk and `Confirm end of chat` is one of them. For other rich messages, please refer to [Handling messages](#handling-messages).
-All rich messages have message custom type (can be accessed by `UserMessage.getCustomType()` on SendBird SDK) as `SENDBIRD_DESK_RICH_MESSAGE`,
-and `Confirm end of chat` message has custom data (can be accessed by `UserMessage.getData()` on SendBird SDK) as below:
-```js
-{
-    "type": "SENDBIRD_DESK_INQUIRE_TICKET_CLOSURE",
-    "body": {
-        "state": "WAITING" // also can have "CONFIRMED", "DECLINED"
-    }
-}
-```
-This `Confirm end of chat` massage is initiated from agents to inquire closure of ticket to customers.
-The initial `state` will be `WAITING` and you have to implement of updating the `state` according to customers action.
-Usually, you can display `YES` or `NO` button like sample and update to `CONFIRMED` when customers touch `YES` button. Updating to `DECLINED` is also possible when customers touch `NO`.
-For update the `state` of `Confirm end of chat`, please use `ticket.confirmEndOfChat()`.
-```java
-ticket.confirmEndOfChat(userMessage, confirm_or_decline, new Ticket.ConfirmEndOfChatHandler() {
-    @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
-        if (e != null) {
-            // Error handling.
-            return;
-        }
-        
-        // You can update message UI like hiding YES NO buttons.
-    }
-});
-```
-At the moment, tickets will be closed (ticket close event will be sent to customers) only after customers confirming end of chat,  
-
-## Handling ticket event
-SendBird Desk SDK uses some predefined AdminMessage custom type (`AdminMessage.getCustomType()` on SendBird SDK) for ticket update notification.
-This reserved custom type value is `SENDBIRD_DESK_ADMIN_MESSAGE_CUSTOM_TYPE` and at the moment there are 3 kinds of ticket event, which are `Ticket assign`, `Ticket transfer` and `Ticket close`.
-Each event has the following `AdminMessage.getData()`:
-```js
-{
-    "type": "TICKET_ASSIGN" // "TICKET_TRANSFER", "TICKET_CLOSE"
-}
-```
-You can check these messages from `ChannelHandler.onMessageReceived()` callback on SendBird SDK.
-SendBird Desk SDK internally tracks these events and update ticket status automatically. So when you see these events, you can directly get ticket object by `Ticket.getByChannelUrl()` and then use it for e.g. 
-rendering assigned agent's profile or moving ticket from open list to closed list.
-
-## Rich messages
-Besides, `Confirm end of chat` message, URL preview is available as one of rich messages. (We are adding more very fast.)
-URL preview message's `UserMessage.getCustomType()` is also the same as `Confirm end of chat`, so it is `SENDBIRD_DESK_RICH_MESSAGE`.
-Its `UserMessage.getData()` has the following format:
-```js
-{
-    "type": "SENDBIRD_DESK_URL_PREVIEW",
-    "body": {
-        "url": "string",
-        "site_name": "string",
-        "title": "string",
-        "description": "string",
-        "image": "string (image url)"
-    }
-}
-```
-Therefore, when this type of message is received on `ChannelHandler.onMessageReceived()` or `channel.getPreviousMessagesByTimestamp()`, you can parse the data and use it for URL preview rendering.
-Also if you extract URL information from customers text, build above JSON, stringify it and then send it as custom data by `channel.sendUserMessage()`, agents can also see URL preview.
-
-## Ticket Feedback
-If Desk satisfaction feature is on, a message would come after closing the ticket. 
-The message is for getting customer feedback including score and comment. 
-The data of satisfaction form message looks like below.
-```
-{
-    "type": "SENDBIRD_DESK_CUSTOMER_SATISFACTION",
-    "body": {
-        "state": "WAITING" // also can have "CONFIRMED",
-        "customerSatisfactionScore": null, // or a number ranged in [1, 5]
-        "customerSatisfactionComment": null // or a string (optional)
-    }
-}
-```
-Once the customer inputs the score and the comment, the data could be submitted by calling `ticket.submitFeedback(message, score, comment, callback)`. 
-Then updated message is going to be sent in `ChannelHandler.onMessageUpdated(BaseChannel channel, BaseMessage message)`.
-
-## Error Codes
 In case of an API request failure, the `SendBirdException` parameter in a handler will contain the information about the error.
-#### SendBirdException
+
+#### - SendBirdException
+
 |Property|Description|
-|----|----|
-|code|`SendBirdError.ERR_REQUEST_FAILED (800220)`|
+|---|---|
+|code|SendBirdError.ERR_REQUEST_FAILED (800220)|
 |message|Detailed error message with specific error code, if exists.|
 
-## Reference
-Please see the following link for Android Desk SDK Documentation https://github.com/sendbird/SendBird-Desk-iOS-Framework
