@@ -100,7 +100,7 @@ repositories {
 // Add the following dependency to the build.gradle file at the app level.
 dependencies {
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.151'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.9'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.10'
 }
 ```
 
@@ -643,6 +643,24 @@ Ticket.getOpenCount(new Ticket.GetOpenCountHandler() {
         }
 
         // TODO: Implement your code with the result value.
+    }
+});
+```
+
+### Close a ticket
+
+Use the `ticket.close()` method to allow customers to directly close a ticket on their client app so that agents can quickly switch to other customer inquiries without delay or a customer’s confirmation.
+
+```java
+ticket.close(CLOSE_COMMENT, new Ticket.CloseHandler() {
+    @Override
+    public void onResult(Ticket ticket, SendBirdException e) {
+        if (e != null) {    // Error.
+            return;
+        }
+        ... 
+     
+        // TODO: Implement your code to close a ticket.
     }
 });
 ```

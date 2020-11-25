@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.0.10 (Nov 25, 2020)
+* Added `close(String comment, CloseHandler handler)` in Ticket.
+
 ### v1.0.9 (Oct 22, 2020)
 * Minor bugfix.
 
