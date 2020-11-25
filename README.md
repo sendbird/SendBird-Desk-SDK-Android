@@ -479,10 +479,11 @@ You can send a message to customers right after closing a ticket to ask whether 
 |WAITING|Set when an agent sends a customer feedback request message.|
 |CONFIRMED|Set when a customer sends a response.|
 
-When a customer replies to the message, their score and comment for the ticket are sent to the Desk server by calling the `Ticket.submitFeedback()` method. Then, the state of the confirmation request message is changed to `CONFIRMED`.
+When a customer replies to the message, their score and comment for the ticket are sent to the Desk server by calling the `ticket.submitFeedback()` method. Then, the state of the confirmation request message is changed to `CONFIRMED`.
 
 ```java
-Ticket.submitFeedback(USER_MESSAGE, SCORE, new Ticket.SubmitFeedbackHandler() {
+
+ticket.submitFeedback(USER_MESSAGE, SCORE, COMMENT, net Ticket.SubmitFeedbackHandler() {
     @Override
     public void onResult(Ticket ticket, SendBirdException e) {
         if (e != null) {    // Error.
@@ -491,6 +492,7 @@ Ticket.submitFeedback(USER_MESSAGE, SCORE, new Ticket.SubmitFeedbackHandler() {
         ...   
     }
 });
+
 ```
 
 Sendbird Desk server notifies the customer’s client app of updates through the `onMessageUpdate()` method of the channel event handler.
