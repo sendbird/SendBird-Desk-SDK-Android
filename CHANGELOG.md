@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.0.12 (Mar 2, 2021)
+* Improved handling of error code.
+
 ### v1.0.11 (Dec 4, 2020)
 * Improved stability.
 

@@ -100,7 +100,7 @@ repositories {
 // Add the following dependency to the build.gradle file at the app level.
 dependencies {
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.151'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.11'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.12'
 }
 ```
 
