@@ -100,8 +100,8 @@ Then, add the dependency to the project's top-level `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.160'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.12'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.164'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.13'
 }
 ```
 
