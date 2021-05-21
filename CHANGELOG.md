@@ -1,5 +1,13 @@
 ## Change Log
 
+### v1.0.14 (May 21, 2021)
+* Added supports for BotKey.
+    * Added option to specify botKey when creating `Ticket`.
+* Added `cancel(String transferGroupKey, Ticket.CancelHandler handler)`.
+* Added support for FAQ.
+    * Added `selectQuestion(long faqFileId, String question, Ticket.SelectQuestionHandler handler)`.
+    * Added `FAQData` and `FAQResult`.
+
 ### v1.0.12 (Mar 2, 2021)
 * Improved handling of error code.
 
