@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.0.14 (Jun 2, 2021)
+* Renamed parameter name of `Ticket#cancel` from `groupKey` to `groupKeyForTransfer`.
+
 ### v1.0.13 (May 21, 2021)
 * Added supports for BotKey.
     * Added option to specify botKey when creating `Ticket`.
