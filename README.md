@@ -11,7 +11,6 @@
   1. [Creating your first ticket](#creating-your-first-ticket)
   1. [Implementation guide](#implementation-guide)
 
-  
 <br />
 
 ## Introduction
@@ -43,7 +42,7 @@ These are a few of the main components of Desk SDK.
 
 ### More about Sendbird Desk SDK for Android
 
-Find out more about Sendbird Desk SDK for Android on [Desk SDK for Android doc](https://sendbird.com/docs/desk/v1/android/getting-started/about-desk-sdk). If you have any comments or questions regarding bugs and feature requests, visit [Sendbird community](https://community.sendbird.com).
+Find out more about Sendbird Desk SDK for Android on [Desk SDK for Android doc](https://sendbird.com/docs/desk/v1/android/quickstart/create-first-ticket). If you have any comments or questions regarding bugs and feature requests, visit [Sendbird community](https://community.sendbird.com).
 
 <br />
 
@@ -53,9 +52,11 @@ This section shows the prerequisites you need to check to use Sendbird Desk SDK 
 
 ### Requirements
 
-- `Android 4.0 (API level 14) or later`
-- `Java 7 or later`
-- `Gradle 3.4.0 or later`
+- `Android 5.0 (API level 21) or higher`
+- `Java 8 or higher`
+- `Support androidx only`
+- `Android Gradle plugin 4.0.1 or higher`
+- `Sendbird Chat SDK for Android 4.0.3 and later`
 
 <br />
 
@@ -100,8 +101,7 @@ Then, add the dependency to the project's top-level `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.164'
-    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.0.14'
+    implementation 'com.sendbird.sdk:sendbird-desk-android-sdk:1.1.0'
 }
 ```
 
@@ -115,15 +115,31 @@ After installation has been completed, a ticket can be created for communication
 
 ### Step 1: Initialize the Desk SDK
 
-First, a ‘SendBirdDesk’ instance must be initialized when launching a client app. Call the ‘SendBird.init()’ and the ‘SendBirdDesk.init()’ on the ‘Application.onCreate()’. The Sendbird.init() should be initialized first by the APP_ID of your Sendbird application in the dashboard.  
+First, a ‘SendBirdDesk’ instance must be initialized when launching a client app. Call the SendbirdChat.init()’ and the ‘SendBirdDesk.init()’ on the ‘Application.onCreate()’. The SendbirdChat.init() should be initialized first by the APP_ID of your Sendbird application in the dashboard.  
 
 ```java
 public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SendBird.init(APP_ID, this);
-        SendBirdDesk.init();
+        final InitParams initParams = new InitParams(APP_ID, this, false);
+        SendbirdChat.init(initParams, new InitResultHandler() {
+            @Override
+            public void onMigrationStarted() {
+            }
+
+            @Override
+            public void onInitFailed(SendbirdException e) {
+                // If initializing fails, this method is called.
+            }
+
+            @Override
+            public void onInitSucceed() {
+                // If initializing is successful, this method is called and you can proceed to the next step.
+                // You can use all Sendbird APIs, including Connect, after init is completed in your app.
+                SendBirdDesk.init();
+            }
+        });
     }
 }
 ```
@@ -142,8 +158,24 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SendBird.init(APP_ID, this);
-        SendBirdDesk.init();
+        final InitParams initParams = new InitParams(APP_ID, this, false);
+        SendbirdChat.init(initParams, new InitResultHandler() {
+            @Override
+            public void onMigrationStarted() {
+            }
+
+            @Override
+            public void onInitFailed(SendbirdException e) {
+                // If initializing fails, this method is called.
+            }
+
+            @Override
+            public void onInitSucceed() {
+                // If initializing is successful, this method is called and you can proceed to the next step.
+                // You can use all Sendbird APIs, including Connect, after init is completed in your app.
+                SendBirdDesk.init();
+            }
+        });
     }
 }
 ```
@@ -158,28 +190,28 @@ Customers can request support from various types of channels: in-app chats or so
 Once authenticated, customers can live-chat with agents based on Sendbird Chat platform.
 
 ```java
-SendBird.connect(userId, accessToken, new SendBird.ConnectHandler() {
+SendbirdChat.connect(userId, accessToken, new ConnectHandler() {
     @Override
-    public void onConnected(User user, SendBirdException e) {
-        if (e != null) {    // error. 
+    public void onConnected(User user, SendbirdException e) {
+        if (e != null) {    // error.
             return;
         }
-        // Use the same user Id and access token used in the SendBird.connect().
+        // Use the same user Id and access token used in the SendbirdChat.connect().
         SendBirdDesk.authenticate(userId, accessToken, new SendBirdDesk.AuthenticateHandler() {
             @Override
-            public void onResult(SendBirdException e) {
+            public void onResult(SendbirdException e) {
                 if (e != null) {    //error.
                     return;
                 }
 
-            // SendBirdDesk is now initialized, and the customer is authenticated.
+                // SendBirdDesk is now initialized, and the customer is authenticated.
             }
         });
     }
 });
 ```
 
-> **Note**: **Customers from Sendbird Chat platform** signifies users who are already authenticated with the Chat SDK. If you’re implementing Chat SDK and Desk SDK at the same time, [connect a user to Sendbird server with their user ID and access token](https://sendbird.com/docs/chat/v3/android/guides/authentication) first.
+> **Note**: **Customers from Sendbird Chat platform** signifies users who are already authenticated with the Chat SDK. If you’re implementing Chat SDK and Desk SDK at the same time, [connect a user to Sendbird server with their user ID and access token](https://sendbird.com/docs/chat/v4/android/getting-started/send-first-message#2-get-started-3-step-3-initialize-the-chat-sdk) first.
 
 ### Step 3: Create a ticket
 
@@ -188,7 +220,7 @@ Implement the `Ticket.create()` method to create a new ticket either before or a
 ```java
 Ticket.create(ticketTitle, userName, new Ticket.CreateHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
     if (e != null) {    // error
         return;
         }
@@ -228,7 +260,7 @@ Ticket.create(TICKET_TITLE, USER_NAME,
     RELATED_CHANNEL_URLS,
     new Ticket.CreateHandler() {
         @Override
-        public void onResult(Ticket ticket, SendBirdException e) {
+        public void onResult(Ticket ticket, SendbirdException e) {
             if (e != null) {    // Error.
                 return;
             }
@@ -255,7 +287,7 @@ customFields.put("line", String.valueOf(30));
 
 ticket.setCustomFields(customFields, new Ticket.SetCustomFieldHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -281,7 +313,7 @@ customFields.put("age", String.valueOf(30));
 
 SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
     @Override
-    public void onResult(SendBirdException e) {
+    public void onResult(SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -305,7 +337,7 @@ customFields.put("age", String.valueOf(30));
 
 SendBirdDesk.setCustomerCustomFields(customFields, new SendBirdDesk.SetCustomerCustomFieldsHandler() {
     @Override
-    public void onResult(SendBirdException e) {
+    public void onResult(SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -323,7 +355,7 @@ Related channels indicate group channels in Sendbird Chat platform that are rela
 ```java
 ticket.setRelatedChannelUrls(RELATED_CHANNEL_URLS, new Ticket.SetRelatedChannelUrlsHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -342,33 +374,27 @@ With URL previews, your application users can meet their expectations of what th
 To preview URLs, every text message should be checked if it includes any URLs. When a text message including a URL is successfully sent, the URL should be extracted and passed to Sendbird server using the `getUrlPreview()` method. Set the parsed data received from the server as a `JSON` object and stringify the object to pass it as an argument to a parameter in the `updateUserMessage()` method. Then the updated message with URL preview is delivered to the client apps through the `onMessageUpdated()` method of the channel event handler.
 
 ```java
-ticket.getChannel().sendUserMessage(TEXT, new BaseChannel.SendUserMessageHandler() {
+ticket.getChannel().sendUserMessage(TEXT, new UserMessageHandler() {
     @Override
-    public void onSent(UserMessage userMessage, SendBirdException e) {
+    public void onResult(UserMessage userMessage, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }   
-        ...
         
         List<String> urls = extractUrlsFromMessage(userMessage.getMessage());
         if (urls.size() > 0) {
             String strUrlPreview = toJsonString(getOGTagsWithUrl(urls.get(0)));
-            ticket.getChannel().updateUserMessage(
-                userMessage.getMessageId(), 
-                TEXT, 
-                strUrlPreview, 
-                "SENDBIRD_DESK_RICH_MESSAGE", 
-                new BaseChannel.UpdateUserMessageHandler() {
-                    @Override
-                    public void onUpdated(UserMessage userMessage, SendBirdException e) {
-                        if (e != null) {    // Error.
-                            return;
-                        }
-                         
-                        ... 
+            UserMessageUpdateParams updateParams = new UserMessageUpdateParams(TEXT);
+            updateParams.setData(strUrlPreview);
+            updateParams.setCustomType("SENDBIRD_DESK_RICH_MESSAGE");
+            ticket.getChannel().updateUserMessage(userMessage.getMessageId(), updateParams, new UserMessageHandler() {
+                @Override
+                public void onResult(UserMessage userMessage, SendbirdException e) {
+                    if (e != null) {    // Error.
+                        return;
                     }
                 }
-            );
+            });
         } 
     }
 });
@@ -450,7 +476,7 @@ When a customer replies to the message, the response true (agree) or false (decl
 ```java
 ticket.confirmEndOfChat(USER_MESSAGE, true|false, new Ticket.ConfirmEndOfChatHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -484,11 +510,10 @@ When a customer replies to the message, their score and comment for the ticket a
 
 ticket.submitFeedback(USER_MESSAGE, SCORE, COMMENT, net Ticket.SubmitFeedbackHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
-        ...   
     }
 });
 
@@ -500,7 +525,7 @@ Sendbird Desk server notifies the customer’s client app of updates through the
 public void onMessageUpdated(final BaseChannel channel, final BaseMessage message) {
     Ticket.getByChannelUrl(channel.getUrl(), new Ticket.GetByChannelUrlHandler() {
         @Override
-        public void onResult(Ticket ticket, SendBirdException e) {
+        public void onResult(Ticket ticket, SendbirdException e) {
             if (e != null) return;
 
             String data = message.getData();
@@ -546,12 +571,10 @@ A closed ticket can be reopened by using the `reopen()` method in the `Ticket`.
 ```java
 ticket.reopen(new Ticket.ReopenHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
-        }
-        ... 
-     
+        }     
     }
 });
 ```
@@ -568,7 +591,7 @@ You can design an inbox activity for open tickets and closed tickets history for
 // getOpenedList()
 Ticket.getOpenedList(OFFSET, new Ticket.GetOpenedListHandler() {
     @Override
-    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -583,7 +606,7 @@ Ticket.getOpenedList(OFFSET, new Ticket.GetOpenedListHandler() {
 // getClosedList() 
 Ticket.getClosedList(OFFSET, new Ticket.GetClosedListHandler() {
     @Override
-    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -602,7 +625,7 @@ customFieldFilter.put("subject", "doggy_doggy");
 
 Ticket.getOpenedList(OFFSET, customFieldFilter, new Ticket.GetOpenedListHandler() {
     @Override
-    public void onResult(List<Ticket> tickets, boolean hasNext, SendBirdException e) {
+    public void onResult(List<Ticket> tickets, boolean hasNext, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -621,7 +644,7 @@ You can retrieve a specific ticket with its channel URL.
 ```java
 Ticket.getByChannelUrl(channel.getUrl(), new Ticket.GetByChannelUrlHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -636,7 +659,7 @@ You can display the number of open tickets on your client app by using the `Tick
 ```java
 Ticket.getOpenCount(new Ticket.GetOpenCountHandler() {
     @Override
-    public void onResult(int count, SendBirdException e) {
+    public void onResult(int count, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
@@ -653,11 +676,10 @@ Use the `ticket.close()` method to allow customers to directly close a ticket on
 ```java
 ticket.close(CLOSE_COMMENT, new Ticket.CloseHandler() {
     @Override
-    public void onResult(Ticket ticket, SendBirdException e) {
+    public void onResult(Ticket ticket, SendbirdException e) {
         if (e != null) {    // Error.
             return;
         }
-        ... 
      
         // TODO: Implement your code to close a ticket.
     }
@@ -666,9 +688,9 @@ ticket.close(CLOSE_COMMENT, new Ticket.CloseHandler() {
 
 ### Error Codes
 
-In case of an API request failure, the `SendBirdException` parameter in a handler will contain the information about the error.
+In case of an API request failure, the `SendbirdException` parameter in a handler will contain the information about the error.
 
-#### - SendBirdException
+#### - SendbirdException
 
 |Property|Description|
 |---|---|

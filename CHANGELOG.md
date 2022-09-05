@@ -1,4 +1,14 @@
-## Change Log
+# Changelog
+
+### v1.1.0 (Sep 6, 2022)
+* Requirements changes
+    * Android 5.0 (API level 21) or higher
+    * Java 8 or higher
+    * Support androidx only
+    * Android Gradle plugin 4.0.1 or higher
+    * Sendbird Chat SDK for Android 4.0.3 and later
+* Artifact type has been changed
+    * jar → aar
 
 ### v1.0.14 (Jun 2, 2021)
 * Renamed parameter name of `Ticket#cancel` from `groupKey` to `groupKeyForTransfer`.
