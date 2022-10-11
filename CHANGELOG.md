@@ -1,6 +1,11 @@
 # Changelog
 
-### v1.1.0 (Sep 6, 2022)
+### v1.1.1 (Oct 11, 2022) with Chat SDK v4.0.9
+* Connection error fixed.
+* Improved stability.
+
+~~### v1.1.0 (Sep 6, 2022) with Chat SDK v4.0.8~~
+* **Deprecated as this version would cause connection failure to the desk server**
 * Requirements changes
     * Android 5.0 (API level 21) or higher
     * Java 8 or higher
