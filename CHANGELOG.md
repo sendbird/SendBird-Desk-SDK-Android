@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.1.2 (Jan 19, 2023) with Chat SDK v4.2.1
+* Added  `getStatus2()` , `getAllTicketList(int, Map, GetTicketListHandler)`, `getTicketList(int, Map, List, GetTicketListHandler)` in `Ticket` class.
+* Deprecated `getStatus()` in `Ticket` class.
+
 ### v1.1.1 (Oct 11, 2022) with Chat SDK v4.0.9
 * Connection error fixed.
 * Improved stability.
