@@ -1,6 +1,11 @@
 # Changelog
 
-### v1.1.2 (Jan 19, 2023) with Chat SDK v4.2.1
+### v1.1.3 (Mar 3, 2023) with Chat SDK v4.2.1
+* Connection error fixed.
+* Improved stability.
+
+~~### v1.1.2 (Jan 19, 2023) with Chat SDK v4.2.1~~
+* **Deprecated as this version would cause connection failure to the desk server**
 * Added  `getStatus2()` , `getAllTicketList(int, Map, GetTicketListHandler)`, `getTicketList(int, Map, List, GetTicketListHandler)` in `Ticket` class.
 * Deprecated `getStatus()` in `Ticket` class.
 
