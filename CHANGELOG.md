@@ -1,5 +1,8 @@
 # Changelog
 
+### v1.1.4 (Oct 20, 2023) with Chat SDK v4.9.1
+* Added  `getFirstResponseTime()` , `getIssuedAt()` in `Ticket` class.
+
 ### v1.1.3 (Mar 3, 2023) with Chat SDK v4.2.1
 * Connection error fixed.
 * Improved stability.
