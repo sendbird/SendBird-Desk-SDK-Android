@@ -1,0 +1,110 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.sendbird.sdk",
+    "module": "sendbird-desk-android-sdk",
+    "version": "1.1.6",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.sendbird.sdk",
+          "module": "sendbird-chat",
+          "version": {
+            "requires": "4.24.1"
+          }
+        },
+        {
+          "group": "androidx.databinding",
+          "module": "viewbinding",
+          "version": {
+            "requires": "7.1.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sendbird-desk-android-sdk-1.1.6.aar",
+          "url": "sendbird-desk-android-sdk-1.1.6.aar",
+          "size": 48876,
+          "sha512": "35f751dd17a48e4dcf541d1bc8c34e90344ec947a7b659db00aff19bdc2ad9e6c37296cce54e1a48d715fd957c571e19e7d1874d84496436aac2f5294d46cfd6",
+          "sha256": "fa688fb2010a6cd8d28ac09ba431b60cf2ab4b43f73aa8961a7aefd3a35d389e",
+          "sha1": "a0409dcd854453896e2b5da28cf0d5b90b5a0dcd",
+          "md5": "ed7127d927a8c5f4122a36d74505a635"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.sendbird.sdk",
+          "module": "sendbird-chat",
+          "version": {
+            "requires": "4.24.1"
+          }
+        },
+        {
+          "group": "androidx.databinding",
+          "module": "viewbinding",
+          "version": {
+            "requires": "7.1.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sendbird-desk-android-sdk-1.1.6.aar",
+          "url": "sendbird-desk-android-sdk-1.1.6.aar",
+          "size": 48876,
+          "sha512": "35f751dd17a48e4dcf541d1bc8c34e90344ec947a7b659db00aff19bdc2ad9e6c37296cce54e1a48d715fd957c571e19e7d1874d84496436aac2f5294d46cfd6",
+          "sha256": "fa688fb2010a6cd8d28ac09ba431b60cf2ab4b43f73aa8961a7aefd3a35d389e",
+          "sha1": "a0409dcd854453896e2b5da28cf0d5b90b5a0dcd",
+          "md5": "ed7127d927a8c5f4122a36d74505a635"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "sendbird-desk-android-sdk-1.1.6-sources.jar",
+          "url": "sendbird-desk-android-sdk-1.1.6-sources.jar",
+          "size": 18272,
+          "sha512": "c1d79d8012bd10d16a901d6d0bad7656637c802ff95e76bc645a590997b07821bf69668f1a6c43665e897883659ee13088761a890b510aa83f96d21e08928e0f",
+          "sha256": "30ef30c757ffced01c5daf3a89d108759e1267ad89221ba818e377bd20c4a2bc",
+          "sha1": "2d75109c28c0cb0600356e8b77ba4ae65b68ac1e",
+          "md5": "7e4ec98db5da2dbaba2f8394d184abdc"
+        }
+      ]
+    }
+  ]
+}
