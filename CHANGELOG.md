@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.1.6 (May 27, 2025) with Chat SDK v4.24.1
+* Updated Desk SDK to support `shadow plugin` Chat SDK.
+* SDK version **1.1.5** is now officially deprecated due to critical compatibility issues with authentication
+
 ### v1.1.4 (Oct 20, 2023) with Chat SDK v4.9.1
 * Added  `getFirstResponseTime()` , `getIssuedAt()` in `Ticket` class.
 
