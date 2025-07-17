@@ -1,5 +1,12 @@
 # Changelog
 
+### v1.1.7 (Jul 17, 2025) with Chat SDK v4.24.1
+- Authenticate user with optional language parameter
+  - `authenticate(userId, accessToken, language, handler)`
+- Update customer's language setting after authentication
+  - `setCustomerLanguage(language, handler)`
+- Language format: IETF BCP 47 standard ("en", "ko", "ja")
+
 ### v1.1.6 (May 27, 2025) with Chat SDK v4.24.1
 * Updated Desk SDK to support `shadow plugin` Chat SDK.
 * SDK version **1.1.5** is now officially deprecated due to critical compatibility issues with authentication
